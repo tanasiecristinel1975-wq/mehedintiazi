@@ -97,16 +97,14 @@ header {
   margin-top: 2px;
 }
 .header-banner {
-  background: #eee;
+  background: transparent;
   width: 468px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #999;
-  border: 1px dashed #ccc;
+  height: 65px;
+  display: block;
+  overflow: hidden;
+  border: none;
   flex-shrink: 0;
+  border-radius: 4px;
 }
 .header-search {
   display: flex;
