@@ -116,6 +116,32 @@
   </a>
 </div>
 
+<!-- BANNER LIVE YouTube - apare automat cand canalul e live -->
+<div id="live-banner" style="display:none;background:#e00;color:#fff;text-align:center;padding:10px 0;font-size:15px;font-weight:900;letter-spacing:1px;animation:livePulse 1.5s infinite;">
+  <a href="live.html" style="color:#fff;text-decoration:none;">&#128309; SUNTEM LIVE ACUM pe YouTube — Click aici pentru a urmări transmisiunea &rsaquo;</a>
+</div>
+<style>
+@keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.75} }
+</style>
+<script>
+(function checkLive() {
+  var CHANNEL = 'UC88sFH8bH2sHoK-mAjupNhA';
+  var KEY = 'AIzaSyDBf8fz0auW3gGW6ABT8MinG66ZTvjXaF8';
+  var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=' + CHANNEL + '&type=video&eventType=live&key=' + KEY;
+  function check() {
+    fetch(url)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var banner = document.getElementById('live-banner');
+        if (banner) banner.style.display = (data.items && data.items.length > 0) ? 'block' : 'none';
+      })
+      .catch(function(){});
+  }
+  check();
+  setInterval(check, 60000); // verifica la fiecare minut
+})();
+</script>
+
 <!-- ============================================================
      BREAKING NEWS TICKER
      ============================================================ -->
