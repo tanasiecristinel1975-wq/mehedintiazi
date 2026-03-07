@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const LOGO_PATH = path.join(__dirname, 'img', 'watermark-logo.png');
-const LOGO_SCALE = 0.22;
+const LOGO_SCALE = 0.15;
 const LOGO_OPACITY = 0.65;
 
 const SKIP = [

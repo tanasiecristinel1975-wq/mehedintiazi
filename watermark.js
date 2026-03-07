@@ -23,7 +23,7 @@ if (!imagePath) {
 const LOGO_PATH = path.join(__dirname, 'img', 'watermark-logo.png');
 
 // Dimensiunea logo-ului pe imagine (% din latimea imaginii)
-const LOGO_SCALE = 0.22;
+const LOGO_SCALE = 0.15;
 
 // Opacitate logo (0 = transparent, 1 = opac)
 const LOGO_OPACITY = 0.65;
