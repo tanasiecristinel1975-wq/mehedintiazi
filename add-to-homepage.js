@@ -29,7 +29,14 @@ const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim() : 'Stire
 
 // --- Extrage imaginea principala ---
 const imgMatch = html.match(/class="article-img-main"[\s\S]*?<img[^>]*src="([^"]+)"/i);
-const imgSrc = imgMatch ? imgMatch[1] : '';
+let imgSrc = imgMatch ? imgMatch[1] : '';
+
+if (!imgSrc) {
+  const ogImgMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
+  if (ogImgMatch) {
+    imgSrc = ogImgMatch[1].replace('https://www.mehedintiazi.ro', '');
+  }
+}
 
 // --- Extrage categoria (text + culoare) ---
 const catMatch = html.match(/<span[^>]*class="article-category"[^>]*style="[^"]*background:\s*([^;"]+)[^"]*"[^>]*>([\s\S]*?)<\/span>/i);
