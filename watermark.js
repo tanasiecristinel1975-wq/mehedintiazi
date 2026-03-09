@@ -23,10 +23,10 @@ if (!imagePath) {
 const LOGO_PATH = path.join(__dirname, 'img', 'watermark-logo.png');
 
 // Dimensiunea logo-ului pe imagine (% din latimea imaginii)
-const LOGO_SCALE = 0.15;
+const LOGO_SCALE = 0.22;
 
 // Opacitate logo (0 = transparent, 1 = opac)
-const LOGO_OPACITY = 0.65;
+const LOGO_OPACITY = 0.80;
 
 async function addWatermark(imgPath) {
   try {
@@ -41,6 +41,22 @@ async function addWatermark(imgPath) {
     const logoRatio = logo.bitmap.height / logo.bitmap.width;
     const logoTargetHeight = Math.floor(logoTargetWidth * logoRatio);
     logo.resize({ w: logoTargetWidth, h: logoTargetHeight });
+
+    // Transforma logo: fundalul alb devine transparent, textul negru devine alb
+    logo.scan(0, 0, logo.bitmap.width, logo.bitmap.height, function(x, y, idx) {
+      const r = this.bitmap.data[idx];
+      const g = this.bitmap.data[idx + 1];
+      const b = this.bitmap.data[idx + 2];
+      if (r > 200 && g > 200 && b > 200) {
+        // Pixel alb (fundal) -> transparent
+        this.bitmap.data[idx + 3] = 0;
+      } else {
+        // Pixel inchis (text/desen) -> alb
+        this.bitmap.data[idx]     = 255;
+        this.bitmap.data[idx + 1] = 255;
+        this.bitmap.data[idx + 2] = 255;
+      }
+    });
 
     // Aplica opacitate
     logo.opacity(LOGO_OPACITY);
