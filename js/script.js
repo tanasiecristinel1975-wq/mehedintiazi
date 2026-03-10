@@ -191,4 +191,54 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   console.log('Mehedinti Azi - site incarcat cu succes!');
+
+  // ----------------------------------------------------------
+  // 11. RADIO PLAYER PLUTITOR
+  // ----------------------------------------------------------
+  var radioHTML = `
+    <div id="radio-player" style="
+      position:fixed; bottom:20px; left:20px; z-index:99999;
+      background:#0d2240; border-radius:12px; padding:10px 14px;
+      display:flex; align-items:center; gap:10px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+      min-width:220px; max-width:260px;
+      border:1px solid rgba(255,255,255,0.1);
+    ">
+      <img src="/img/radio-logo.png" alt="Radio MehedintiAzi" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;" />
+      <div style="flex:1;min-width:0;">
+        <div style="color:#fff;font-size:12px;font-weight:700;letter-spacing:0.5px;">RADIO</div>
+        <div style="color:#f0c040;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">MehedintiAzi.ro</div>
+        <div id="radio-status" style="color:rgba(255,255,255,0.5);font-size:10px;">Apasa Play</div>
+      </div>
+      <button id="radio-btn" onclick="radioToggle()" style="
+        background:#c0392b; border:none; border-radius:50%;
+        width:36px; height:36px; cursor:pointer;
+        display:flex; align-items:center; justify-content:center;
+        flex-shrink:0; font-size:14px; color:#fff;
+      ">&#9654;</button>
+      <audio id="radio-audio" preload="none">
+        <source src="http://radio.mehedintiazi.ro/radio" type="audio/mpeg" />
+      </audio>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', radioHTML);
+
+  window.radioToggle = function() {
+    var audio = document.getElementById('radio-audio');
+    var btn = document.getElementById('radio-btn');
+    var status = document.getElementById('radio-status');
+    if (audio.paused) {
+      audio.load();
+      audio.play();
+      btn.innerHTML = '&#9646;&#9646;';
+      btn.style.background = '#27ae60';
+      status.textContent = 'Live...';
+    } else {
+      audio.pause();
+      audio.src = '';
+      btn.innerHTML = '&#9654;';
+      btn.style.background = '#c0392b';
+      status.textContent = 'Apasa Play';
+    }
+  };
 });
