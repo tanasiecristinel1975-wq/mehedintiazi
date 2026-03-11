@@ -72,16 +72,9 @@ const card = `
           </div>
 `;
 
-// --- Insereaza in index.html dupa marcajul grilei ---
+// --- Insereaza in index.html ---
 const indexPath = path.resolve('index.html');
 let indexHtml = fs.readFileSync(indexPath, 'utf8');
-
-const MARKER = '<!-- GRID 4 ARTICOLE - Copiaza blocul article-card pentru fiecare stire noua -->\n        <div class="articles-grid mb-20">';
-
-if (!indexHtml.includes(MARKER)) {
-  console.error('Nu am gasit marcajul in index.html. Verifica structura homepage-ului.');
-  process.exit(1);
-}
 
 // Verifica daca stirea e deja adaugata
 if (indexHtml.includes(slug)) {
@@ -89,7 +82,105 @@ if (indexHtml.includes(slug)) {
   process.exit(0);
 }
 
-indexHtml = indexHtml.replace(MARKER, MARKER + card);
-fs.writeFileSync(indexPath, indexHtml, 'utf8');
+// -------------------------------------------------------
+// 1. Actualizeaza HERO SECTION
+//    - stirea noua devine hero-main
+//    - vechiul hero-main devine primul hero-side
+//    - vechiul primul hero-side devine al doilea hero-side
+// -------------------------------------------------------
 
-console.log('OK Adaugat pe homepage: ' + slug);
+// Extrage datele din hero-main curent
+const heroMainMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->\s*<div class="hero-main">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>\s*\n\s*\n\s*<!-- STIRI SECUNDARE/);
+
+// Extrage img, href, titlu si data din hero-main curent
+const heroImgMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<img src="([^"]+)"[^>]*\/>/);
+const heroBadgeMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<span class="hero-badge"[^>]*>([\s\S]*?)<\/span>/);
+const heroHrefMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<h2><a href="([^"]+)">([\s\S]*?)<\/a><\/h2>/);
+const heroDateMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<span>(&#128336;[^<]+)<\/span>/);
+
+const oldHeroImg = heroImgMatch ? heroImgMatch[1] : '';
+const oldHeroBadge = heroBadgeMatch ? heroBadgeMatch[1].trim() : 'Actualitate';
+const oldHeroHref = heroHrefMatch ? heroHrefMatch[1] : '#';
+const oldHeroTitle = heroHrefMatch ? heroHrefMatch[2].replace(/<[^>]+>/g, '').trim() : '';
+const oldHeroDate = heroDateMatch ? heroDateMatch[1] : '&#128336; 2026';
+
+// Extrage primul side-article curent
+const sideMatch = indexHtml.match(/<!-- STIRI SECUNDARE -->\s*<div class="hero-side">\s*<div class="side-article">([\s\S]*?)<\/div>\s*<div class="side-article">/);
+const side1ImgMatch = indexHtml.match(/<!-- STIRI SECUNDARE -->[\s\S]*?<div class="side-article">[\s\S]*?<img src="([^"]+)"/);
+const side1HrefMatch = indexHtml.match(/<!-- STIRI SECUNDARE -->[\s\S]*?<div class="side-article">[\s\S]*?<h4><a href="([^"]+)">([\s\S]*?)<\/a><\/h4>/);
+const side1BadgeMatch = indexHtml.match(/<!-- STIRI SECUNDARE -->[\s\S]*?<div class="side-article">[\s\S]*?<div class="badge"[^>]*>([\s\S]*?)<\/div>/);
+const side1DateMatch = indexHtml.match(/<!-- STIRI SECUNDARE -->[\s\S]*?<div class="side-article">[\s\S]*?<div class="meta">([\s\S]*?)<\/div>/);
+
+const side1Img = side1ImgMatch ? side1ImgMatch[1] : '';
+const side1Href = side1HrefMatch ? side1HrefMatch[1] : '#';
+const side1Title = side1HrefMatch ? side1HrefMatch[2].replace(/<[^>]+>/g, '').trim() : '';
+const side1Badge = side1BadgeMatch ? side1BadgeMatch[1].trim() : 'Actualitate';
+const side1Date = side1DateMatch ? side1DateMatch[1].trim() : '';
+
+// Noul hero-main cu stirea noua
+const newHeroMain = `      <!-- STIRE PRINCIPALA HERO -->
+      <div class="hero-main">
+        <div class="img-wrapper">
+          <img src="${imgSrc}" alt="${title}" />
+        </div>
+        <div class="hero-text">
+          <span class="hero-badge" style="background:${catColor};">${catText}</span>
+          <h2><a href="${slug}">${title}</a></h2>
+          <p class="excerpt">${excerpt}</p>
+          <div class="hero-meta">
+            <span>&#128336; ${dateStr}</span>
+          </div>
+        </div>
+      </div>`;
+
+// Noul hero-side: vechiul hero-main + vechiul side1
+const newHeroSide = `      <!-- STIRI SECUNDARE -->
+      <div class="hero-side">
+        <div class="side-article">
+          <div class="side-img">
+            <img src="${oldHeroImg}" alt="${oldHeroTitle}" style="object-fit:cover;" />
+          </div>
+          <div class="side-text">
+            <div class="badge">${oldHeroBadge}</div>
+            <h4><a href="${oldHeroHref}">${oldHeroTitle}</a></h4>
+            <div class="meta">${oldHeroDate}</div>
+          </div>
+        </div>
+        <div class="side-article">
+          <div class="side-img">
+            <img src="${side1Img}" alt="${side1Title}" style="object-fit:cover;" />
+          </div>
+          <div class="side-text">
+            <div class="badge">${side1Badge}</div>
+            <h4><a href="${side1Href}">${side1Title}</a></h4>
+            <div class="meta">${side1Date}</div>
+          </div>
+        </div>
+      </div>`;
+
+// Inlocuieste toata sectiunea hero-grid
+const heroGridMatch = indexHtml.match(/<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<!-- STIRI SECUNDARE -->[\s\S]*?<\/div>\s*<\/div>\s*\n\s*\n\s*<\/div>\s*<\/div>\s*<\/section>/);
+if (heroGridMatch) {
+  indexHtml = indexHtml.replace(
+    /<!-- STIRE PRINCIPALA HERO -->[\s\S]*?<\/div>\s*\n\n\s*<\/div>\s*<\/div>\s*<\/section>/,
+    newHeroMain + '\n\n' + newHeroSide + '\n\n    </div>\n  </div>\n</section>'
+  );
+  console.log('OK Hero actualizat cu: ' + slug);
+} else {
+  console.log('WARN: Nu am putut actualiza hero section');
+}
+
+// -------------------------------------------------------
+// 2. Adauga in grila de articole (top)
+// -------------------------------------------------------
+const MARKER = '<!-- GRID 4 ARTICOLE - Copiaza blocul article-card pentru fiecare stire noua -->\n        <div class="articles-grid mb-20">';
+
+if (!indexHtml.includes(MARKER)) {
+  console.error('Nu am gasit marcajul grilei in index.html.');
+} else {
+  indexHtml = indexHtml.replace(MARKER, MARKER + card);
+  console.log('OK Adaugat in grila: ' + slug);
+}
+
+fs.writeFileSync(indexPath, indexHtml, 'utf8');
+console.log('OK Homepage actualizat: ' + slug);
