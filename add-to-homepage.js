@@ -74,7 +74,7 @@ const card = `
 
 // --- Insereaza in index.html ---
 const indexPath = path.resolve('index.html');
-let indexHtml = fs.readFileSync(indexPath, 'utf8');
+let indexHtml = fs.readFileSync(indexPath, 'utf8').replace(/\r\n/g, '\n');
 
 // Verifica daca stirea e deja adaugata
 if (indexHtml.includes(slug)) {
