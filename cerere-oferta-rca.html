@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cerere Ofertă RCA — Destine Broker de Asigurări</title>
+  <meta name="description" content="Completează formularul și vei fi contactat în cel mai scurt timp cu o ofertă personalizată RCA." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0d2240 100%);
+      color: #fff; padding: 30px 20px; text-align: center;
+    }
+    .header img { width: 70px; height: 70px; border-radius: 50%; margin-bottom: 12px; object-fit: cover; }
+    .header h1 { font-size: 24px; font-weight: 700; }
+    .header p { color: rgba(255,255,255,0.75); font-size: 14px; margin-top: 6px; }
+    .header .tel { display: inline-block; margin-top: 12px; background: #f0c040; color: #1a3a5c; font-weight: 700; font-size: 15px; padding: 8px 20px; border-radius: 25px; text-decoration: none; }
+
+    .card {
+      max-width: 560px; margin: 30px auto 40px; background: #fff;
+      border-radius: 14px; box-shadow: 0 6px 30px rgba(0,0,0,0.1); overflow: hidden;
+    }
+
+    .card-body { padding: 30px; }
+
+    .steps { display: flex; gap: 0; margin-bottom: 28px; }
+    .step { flex: 1; text-align: center; padding: 12px 6px; background: #f8f9fb; border-bottom: 3px solid #e0e0e0; font-size: 12px; color: #aaa; }
+    .step.active { background: #eaf1fb; border-color: #1a3a5c; color: #1a3a5c; font-weight: 700; }
+    .step span { display: block; font-size: 20px; margin-bottom: 4px; }
+
+    .section-label { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; margin-top: 22px; }
+    .section-label:first-child { margin-top: 0; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 12px 14px; border: 2px solid #e8e8e8; border-radius: 8px;
+      font-size: 14px; color: #222; outline: none; transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #1a3a5c; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn-submit {
+      width: 100%; padding: 16px; background: #c0392b; color: #fff;
+      font-size: 16px; font-weight: 700; border: none; border-radius: 10px;
+      cursor: pointer; margin-top: 20px; transition: all 0.2s; letter-spacing: 0.3px;
+    }
+    .btn-submit:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 15px rgba(192,57,43,0.4); }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .garantie { display: flex; gap: 8px; align-items: flex-start; background: #f8f9fb; border-radius: 8px; padding: 12px; margin-top: 14px; }
+    .garantie .icon { font-size: 22px; flex-shrink: 0; }
+    .garantie p { font-size: 12px; color: #666; line-height: 1.5; }
+
+    /* SUCCESS */
+    .success-screen { display: none; padding: 40px 30px; text-align: center; }
+    .success-screen .icon-big { font-size: 70px; margin-bottom: 16px; }
+    .success-screen h2 { font-size: 22px; color: #1a3a5c; margin-bottom: 10px; }
+    .success-screen p { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 20px; }
+    .success-screen .tel-mare { display: inline-block; background: #1a3a5c; color: #fff; font-size: 18px; font-weight: 700; padding: 14px 28px; border-radius: 10px; text-decoration: none; margin-top: 6px; }
+
+    .footer-card { text-align: center; padding: 16px; background: #f8f9fb; border-top: 1px solid #eee; font-size: 12px; color: #aaa; }
+
+    @media (max-width: 480px) {
+      .card { margin: 16px; }
+      .card-body { padding: 20px; }
+      .row2 { grid-template-columns: 1fr; }
+      .steps { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛡️ Destine Broker de Asigurări</h1>
+  <p>Completează formularul și te contactăm cu oferta ta RCA</p>
+  <a href="tel:0770450730" class="tel">📞 0770 450 730</a>
+</div>
+
+<div class="card">
+
+  <!-- PASI -->
+  <div class="steps">
+    <div class="step active"><span>1️⃣</span>Date tale</div>
+    <div class="step active"><span>2️⃣</span>Date mașină</div>
+    <div class="step active"><span>3️⃣</span>Primești oferta</div>
+  </div>
+
+  <!-- FORMULAR -->
+  <div class="card-body" id="formScreen">
+
+    <form id="cerereForm">
+      <!-- Web3Forms access key - se pune aici -->
+      <input type="hidden" name="access_key" value="PUNE_AICI_ACCESS_KEY" />
+      <input type="hidden" name="subject" value="Cerere nouă ofertă RCA — Destine Broker" />
+      <input type="hidden" name="from_name" value="Calculator RCA MehedintiAzi" />
+      <input type="hidden" name="redirect" value="false" />
+
+      <div class="section-label">👤 Datele tale</div>
+
+      <div class="form-group">
+        <label>Nume și prenume *</label>
+        <input type="text" name="nume" placeholder="ex: Ion Popescu" required />
+      </div>
+      <div class="row2">
+        <div class="form-group">
+          <label>Telefon *</label>
+          <input type="tel" name="telefon" placeholder="07XX XXX XXX" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="optional" />
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:20px;">🚗 Date mașină</div>
+
+      <div class="row2">
+        <div class="form-group">
+          <label>Marca *</label>
+          <select name="marca" required>
+            <option value="">— Selectează —</option>
+            <option>Dacia</option>
+            <option>Volkswagen</option>
+            <option>Renault</option>
+            <option>Ford</option>
+            <option>Toyota</option>
+            <option>BMW</option>
+            <option>Mercedes-Benz</option>
+            <option>Audi</option>
+            <option>Skoda</option>
+            <option>Opel</option>
+            <option>Peugeot</option>
+            <option>Citroen</option>
+            <option>Hyundai</option>
+            <option>Kia</option>
+            <option>Seat</option>
+            <option>Fiat</option>
+            <option>Nissan</option>
+            <option>Honda</option>
+            <option>Volvo</option>
+            <option>Alta marcă</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Model *</label>
+          <input type="text" name="model" placeholder="ex: Logan, Golf..." required />
+        </div>
+      </div>
+      <div class="row2">
+        <div class="form-group">
+          <label>An fabricație *</label>
+          <select name="an" required id="selAn">
+            <option value="">— An —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Capacitate cilindrică</label>
+          <select name="capacitate">
+            <option value="">— Selectează —</option>
+            <option>până la 1000 cc</option>
+            <option>1001 - 1400 cc</option>
+            <option>1401 - 1600 cc</option>
+            <option>1601 - 2000 cc</option>
+            <option>2001 - 2500 cc</option>
+            <option>peste 2500 cc</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Perioadă dorită</label>
+        <select name="perioada">
+          <option value="">— Selectează —</option>
+          <option>6 luni</option>
+          <option>12 luni</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mesaj / Detalii suplimentare</label>
+        <textarea name="mesaj" placeholder="ex: Mă interesează și CASCO, sau orice altă informație..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnTrimite">
+        📨 Trimite cererea — Te contactăm în cel mai scurt timp!
+      </button>
+
+      <div class="garantie">
+        <div class="icon">🔒</div>
+        <p>Datele tale sunt în siguranță și nu vor fi transmise unor terțe părți. Vei fi contactat doar de agentul Tănăsie Cristinel.</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- ECRAN SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="icon-big">✅</div>
+    <h2>Cererea ta a fost trimisă!</h2>
+    <p>Agentul <strong>Tănăsie Cristinel</strong> va analiza datele tale și te va contacta în cel mai scurt timp cu cea mai bună ofertă RCA.</p>
+    <p style="color:#aaa;font-size:13px;">Dacă dorești să grăbești procesul, poți suna direct:</p>
+    <a href="tel:0770450730" class="tel-mare">📞 0770 450 730</a>
+  </div>
+
+  <div class="footer-card">
+    Destine Broker de Asigurări • Agent: Tănăsie Cristinel • 0770 450 730
+  </div>
+</div>
+
+<script>
+  // Populare ani
+  var sel = document.getElementById('selAn');
+  var an = new Date().getFullYear();
+  for (var y = an; y >= 1990; y--) {
+    var o = document.createElement('option');
+    o.value = o.textContent = y;
+    sel.appendChild(o);
+  }
+
+  // Submit via Web3Forms
+  document.getElementById('cerereForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('btnTrimite');
+    btn.disabled = true;
+    btn.textContent = '⏳ Se trimite...';
+
+    var data = new FormData(this);
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: data
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.success) {
+        document.getElementById('formScreen').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = '📨 Trimite cererea';
+        alert('Eroare la trimitere. Încearcă din nou sau sună la 0770 450 730.');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '📨 Trimite cererea';
+      alert('Eroare de conexiune. Sună direct la 0770 450 730.');
+    });
+  });
+</script>
+
+</body>
+</html>
