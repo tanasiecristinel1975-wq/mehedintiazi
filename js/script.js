@@ -223,6 +223,24 @@ document.addEventListener('DOMContentLoaded', function () {
   `;
   document.body.insertAdjacentHTML('beforeend', radioHTML);
 
+  // ----------------------------------------------------------
+  // BANNER PUBLICITAR - Destine Broker de Asigurari
+  // ----------------------------------------------------------
+  var sidebars = document.querySelectorAll('.sidebar');
+  if (sidebars.length > 0) {
+    var bannerHTML = `
+      <div class="sidebar-widget" style="padding:0;overflow:hidden;border:none;background:transparent;">
+        <a href="tel:0770450730" title="Destine Broker de Asigurari - Tanasie Cristinel 0770 450 730">
+          <img src="/img/banner-destine-broker-asigurari.jpg"
+               alt="Destine Broker de Asigurari - RCA CASCO Locuinta Viata - Tanasie Cristinel 0770 450 730"
+               style="width:100%;display:block;border-radius:6px;cursor:pointer;" />
+        </a>
+      </div>`;
+    sidebars.forEach(function(sb) {
+      sb.insertAdjacentHTML('afterbegin', bannerHTML);
+    });
+  }
+
   window.radioToggle = function() {
     var audio = document.getElementById('radio-audio');
     var btn = document.getElementById('radio-btn');
