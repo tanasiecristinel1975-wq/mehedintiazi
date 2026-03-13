@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator RCA — Destine Broker de Asigurări</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #222; min-height: 100vh; }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0d2240 100%);
+      color: #fff; padding: 20px 0; text-align: center;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+    }
+    .header h1 { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
+    .header p { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+    .header .badge {
+      display: inline-block; background: #f0c040; color: #1a3a5c;
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+      margin-top: 8px; text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* TABS */
+    .tabs { display: flex; background: #fff; border-bottom: 2px solid #e0e0e0; max-width: 900px; margin: 25px auto 0; border-radius: 10px 10px 0 0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .tab-btn { flex: 1; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; background: #fff; color: #888; transition: all 0.2s; letter-spacing: 0.3px; }
+    .tab-btn.active { background: #1a3a5c; color: #fff; }
+    .tab-btn:hover:not(.active) { background: #f5f5f5; color: #1a3a5c; }
+
+    /* CONTENT */
+    .tab-content { display: none; max-width: 900px; margin: 0 auto; background: #fff; border-radius: 0 0 10px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; margin-bottom: 40px; }
+    .tab-content.active { display: block; }
+
+    /* FORM */
+    .section-title { font-size: 16px; font-weight: 700; color: #1a3a5c; border-bottom: 2px solid #f0c040; padding-bottom: 8px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      padding: 11px 14px; border: 2px solid #e0e0e0; border-radius: 6px;
+      font-size: 14px; color: #222; transition: border-color 0.2s; outline: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #1a3a5c; }
+    .form-group input.error, .form-group select.error { border-color: #c0392b; }
+
+    /* PRET ESTIMATIV */
+    .price-box {
+      background: linear-gradient(135deg, #1a3a5c, #0d2240);
+      color: #fff; border-radius: 10px; padding: 24px; margin: 24px 0;
+      text-align: center;
+    }
+    .price-box .label { font-size: 13px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+    .price-box .price { font-size: 48px; font-weight: 700; color: #f0c040; line-height: 1.1; margin: 8px 0; }
+    .price-box .sublabel { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .price-box .details { display: flex; justify-content: center; gap: 20px; margin-top: 14px; flex-wrap: wrap; }
+    .price-box .detail-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px; font-size: 12px; }
+    .price-box .detail-item span { display: block; color: rgba(255,255,255,0.6); font-size: 10px; text-transform: uppercase; }
+
+    /* BUTOANE */
+    .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+    .btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px; }
+    .btn-primary { background: #c0392b; color: #fff; }
+    .btn-primary:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(192,57,43,0.4); }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-secondary { background: #f5f5f5; color: #555; border: 2px solid #e0e0e0; }
+    .btn-secondary:hover { background: #e8e8e8; }
+
+    /* MESAJE */
+    .msg { padding: 14px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-top: 16px; display: none; }
+    .msg.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .msg.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .msg.loading { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+
+    /* DASHBOARD */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: #f8f9fb; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; text-align: center; }
+    .stat-card .stat-num { font-size: 36px; font-weight: 700; color: #1a3a5c; line-height: 1; }
+    .stat-card .stat-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+    .stat-card .stat-icon { font-size: 28px; margin-bottom: 8px; }
+
+    /* TABEL */
+    .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .table-header h3 { font-size: 15px; color: #1a3a5c; font-weight: 700; }
+    .btn-clear { background: none; border: 1px solid #e0e0e0; color: #999; font-size: 12px; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+    .btn-clear:hover { border-color: #c0392b; color: #c0392b; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { background: #1a3a5c; color: #fff; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid #f0f0f0; }
+    tbody tr:hover { background: #f8f9fb; }
+    tbody td { padding: 10px 12px; color: #333; white-space: nowrap; }
+    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .status-trimis { background: #d4edda; color: #155724; }
+    .status-asteptare { background: #fff3cd; color: #856404; }
+    .empty-msg { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+
+    /* EMAILJS CONFIG */
+    .config-box { background: #fffbea; border: 2px dashed #f0c040; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .config-box h4 { color: #856404; font-size: 14px; margin-bottom: 10px; }
+    .config-box p { font-size: 13px; color: #6c5700; line-height: 1.6; }
+    .config-box code { background: #fff3cd; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 12px; }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .price-box .price { font-size: 36px; }
+      .btn-row { flex-direction: column; }
+      .tab-btn { font-size: 12px; padding: 12px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛡️ Calculator RCA</h1>
+  <p>Destine Broker de Asigurări — Agent: Tănăsie Cristinel</p>
+  <div class="badge">📞 0770 450 730</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" style="max-width:900px;margin:25px auto 0;">
+  <button class="tab-btn active" onclick="showTab('calculator')">📋 Calculator RCA</button>
+  <button class="tab-btn" onclick="showTab('dashboard')">📊 Dashboard</button>
+  <button class="tab-btn" onclick="showTab('configurare')">⚙️ Configurare Email</button>
+</div>
+
+<!-- ==================== CALCULATOR ==================== -->
+<div id="tab-calculator" class="tab-content active">
+
+  <div class="section-title">Date client</div>
+  <form id="rcaForm" novalidate>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nume și prenume *</label>
+        <input type="text" id="nume" placeholder="ex: Ion Popescu" required />
+      </div>
+      <div class="form-group">
+        <label>Telefon *</label>
+        <input type="tel" id="telefon" placeholder="ex: 0770 450 730" required />
+      </div>
+      <div class="form-group full">
+        <label>Email *</label>
+        <input type="email" id="email" placeholder="ex: client@email.ro" required />
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:24px;">Date vehicul</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Marca mașinii *</label>
+        <select id="marca" required onchange="updateModele()">
+          <option value="">— Selectează marca —</option>
+          <option>Dacia</option>
+          <option>Volkswagen</option>
+          <option>Renault</option>
+          <option>Ford</option>
+          <option>Toyota</option>
+          <option>BMW</option>
+          <option>Mercedes-Benz</option>
+          <option>Audi</option>
+          <option>Skoda</option>
+          <option>Opel</option>
+          <option>Peugeot</option>
+          <option>Citroen</option>
+          <option>Hyundai</option>
+          <option>Kia</option>
+          <option>Seat</option>
+          <option>Fiat</option>
+          <option>Nissan</option>
+          <option>Honda</option>
+          <option>Mazda</option>
+          <option>Volvo</option>
+          <option>Alta marcă</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Model *</label>
+        <input type="text" id="model" placeholder="ex: Logan, Golf, Clio..." required />
+      </div>
+      <div class="form-group">
+        <label>An fabricație *</label>
+        <select id="anFabricatie" required onchange="calculeazaPret()">
+          <option value="">— Selectează anul —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Capacitate cilindrică *</label>
+        <select id="capacitate" required onchange="calculeazaPret()">
+          <option value="">— Selectează —</option>
+          <option value="800">până la 800 cc</option>
+          <option value="1000">801 - 1000 cc</option>
+          <option value="1200">1001 - 1200 cc</option>
+          <option value="1400">1201 - 1400 cc</option>
+          <option value="1600">1401 - 1600 cc</option>
+          <option value="1800">1601 - 1800 cc</option>
+          <option value="2000">1801 - 2000 cc</option>
+          <option value="2500">2001 - 2500 cc</option>
+          <option value="3000">2501 - 3000 cc</option>
+          <option value="3001">peste 3000 cc</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Perioadă asigurare *</label>
+        <select id="perioada" required onchange="calculeazaPret()">
+          <option value="">— Selectează perioada —</option>
+          <option value="6">6 luni</option>
+          <option value="12">12 luni</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PRET CALCULAT -->
+    <div class="price-box" id="priceBox" style="display:none;">
+      <div class="label">Preț estimativ RCA</div>
+      <div class="price" id="pretAfisat">0 RON</div>
+      <div class="sublabel">*Preț orientativ — oferta finală poate varia</div>
+      <div class="details">
+        <div class="detail-item">
+          <span>Perioadă</span>
+          <span id="detaliu-perioada">—</span>
+        </div>
+        <div class="detail-item">
+          <span>Cilindree</span>
+          <span id="detaliu-cc">—</span>
+        </div>
+        <div class="detail-item">
+          <span>Vechime vehicul</span>
+          <span id="detaliu-vechime">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Resetează</button>
+      <button type="submit" class="btn btn-primary" id="btnTrimite">📨 Trimite oferta pe email</button>
+    </div>
+
+    <div class="msg" id="msgBox"></div>
+  </form>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div id="tab-dashboard" class="tab-content">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Total cereri</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-num" id="statMediu">0</div>
+      <div class="stat-label">Preț mediu RCA (RON)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num" id="statTrimise">0</div>
+      <div class="stat-label">Oferte trimise</div>
+    </div>
+  </div>
+
+  <div class="table-header">
+    <h3>📋 Toate cererile</h3>
+    <button class="btn-clear" onclick="clearAll()">🗑️ Șterge tot</button>
+  </div>
+  <div class="table-wrap">
+    <table id="tabelCereri">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nume client</th>
+          <th>Telefon</th>
+          <th>Email</th>
+          <th>Marca</th>
+          <th>Model</th>
+          <th>An</th>
+          <th>Cilindree</th>
+          <th>Perioadă</th>
+          <th>Preț calculat</th>
+          <th>Status</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody id="tabelBody">
+        <tr><td colspan="12" class="empty-msg">Nu există cereri încă.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== CONFIGURARE ==================== -->
+<div id="tab-configurare" class="tab-content">
+  <div class="config-box">
+    <h4>⚠️ Configurare necesară pentru trimitere email automată</h4>
+    <p>Această aplicație folosește <strong>EmailJS</strong> (gratuit — 200 emailuri/lună) pentru a trimite automat ofertele pe email.</p>
+  </div>
+
+  <div class="section-title">Pasul 1 — Creare cont EmailJS</div>
+  <p style="font-size:14px;line-height:1.8;color:#444;margin-bottom:20px;">
+    Accesează <strong>emailjs.com</strong> și creează un cont gratuit.<br>
+    Mergi la <strong>Email Services</strong> → Add New Service → Gmail (sau alt provider).<br>
+    Notează <code>Service ID</code>.
+  </p>
+
+  <div class="section-title">Pasul 2 — Creare template email</div>
+  <p style="font-size:14px;line-height:1.8;color:#444;margin-bottom:12px;">
+    Mergi la <strong>Email Templates</strong> → Create New Template.<br>
+    Configurează template-ul cu aceste câmpuri:
+  </p>
+  <div style="background:#f8f8f8;border:1px solid #ddd;border-radius:6px;padding:16px;font-family:monospace;font-size:13px;line-height:2;margin-bottom:20px;">
+    <strong>Subject:</strong> Oferta ta RCA — Destine Broker<br>
+    <strong>To Email:</strong> {{to_email}}<br><br>
+    <strong>Body:</strong><br>
+    Bună ziua, {{nume}},<br><br>
+    Vă mulțumim pentru solicitare! Iată oferta dumneavoastră estimativă RCA:<br><br>
+    🚗 Vehicul: {{marca}} {{model}}, an {{an}}<br>
+    ⚙️ Cilindree: {{capacitate}}<br>
+    📅 Perioadă: {{perioada}} luni<br>
+    💰 Preț estimativ: {{pret}} RON<br><br>
+    📞 Pentru oferta finală, contactați-ne:<br>
+    Tănăsie Cristinel — 0770 450 730<br>
+    Destine Broker de Asigurări<br>
+  </div>
+
+  <div class="section-title">Pasul 3 — Completează cheile mai jos</div>
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Public Key (User ID)</label>
+      <input type="text" id="cfg_publicKey" placeholder="ex: user_abc123xyz" />
+    </div>
+    <div class="form-group">
+      <label>Service ID</label>
+      <input type="text" id="cfg_serviceId" placeholder="ex: service_abc123" />
+    </div>
+    <div class="form-group full">
+      <label>Template ID</label>
+      <input type="text" id="cfg_templateId" placeholder="ex: template_abc123" />
+    </div>
+    <div class="form-group full">
+      <label>Email broker (pentru notificări)</label>
+      <input type="email" id="cfg_brokerEmail" placeholder="ex: cristinel@destine.ro" />
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="salveazaConfig()">💾 Salvează configurarea</button>
+  </div>
+  <div class="msg" id="msgConfig"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURARE (se salvează în localStorage)
+// ============================================================
+var CONFIG = {
+  publicKey:   localStorage.getItem('rca_publicKey')   || '',
+  serviceId:   localStorage.getItem('rca_serviceId')   || '',
+  templateId:  localStorage.getItem('rca_templateId')  || '',
+  brokerEmail: localStorage.getItem('rca_brokerEmail') || 'cristinel@destine.ro'
+};
+
+// Init EmailJS dacă avem cheie
+if (CONFIG.publicKey) {
+  emailjs.init(CONFIG.publicKey);
+}
+
+// Umple câmpurile de config
+document.getElementById('cfg_publicKey').value   = CONFIG.publicKey;
+document.getElementById('cfg_serviceId').value   = CONFIG.serviceId;
+document.getElementById('cfg_templateId').value  = CONFIG.templateId;
+document.getElementById('cfg_brokerEmail').value = CONFIG.brokerEmail;
+
+function salveazaConfig() {
+  CONFIG.publicKey   = document.getElementById('cfg_publicKey').value.trim();
+  CONFIG.serviceId   = document.getElementById('cfg_serviceId').value.trim();
+  CONFIG.templateId  = document.getElementById('cfg_templateId').value.trim();
+  CONFIG.brokerEmail = document.getElementById('cfg_brokerEmail').value.trim();
+
+  localStorage.setItem('rca_publicKey',   CONFIG.publicKey);
+  localStorage.setItem('rca_serviceId',   CONFIG.serviceId);
+  localStorage.setItem('rca_templateId',  CONFIG.templateId);
+  localStorage.setItem('rca_brokerEmail', CONFIG.brokerEmail);
+
+  if (CONFIG.publicKey) emailjs.init(CONFIG.publicKey);
+
+  showMsg('msgConfig', 'success', '✅ Configurare salvată cu succes!');
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'dashboard') incarcaDashboard();
+}
+
+// ============================================================
+// POPULARE AN FABRICATIE
+// ============================================================
+(function() {
+  var sel = document.getElementById('anFabricatie');
+  var anCurent = new Date().getFullYear();
+  for (var y = anCurent; y >= 1990; y--) {
+    var opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    sel.appendChild(opt);
+  }
+})();
+
+// ============================================================
+// FORMULA CALCUL RCA
+// ============================================================
+function getPretBaza(cc) {
+  cc = parseInt(cc);
+  if (cc <= 800)  return 320;
+  if (cc <= 1000) return 380;
+  if (cc <= 1200) return 430;
+  if (cc <= 1400) return 490;
+  if (cc <= 1600) return 560;
+  if (cc <= 1800) return 640;
+  if (cc <= 2000) return 730;
+  if (cc <= 2500) return 880;
+  if (cc <= 3000) return 1020;
+  return 1200;
+}
+
+function getCoeficientVechime(an) {
+  var vechime = new Date().getFullYear() - parseInt(an);
+  if (vechime <= 2)  return 1.0;
+  if (vechime <= 5)  return 1.10;
+  if (vechime <= 8)  return 1.22;
+  if (vechime <= 12) return 1.38;
+  if (vechime <= 16) return 1.55;
+  return 1.75;
+}
+
+var pretCalculat = 0;
+
+function calculeazaPret() {
+  var cc       = document.getElementById('capacitate').value;
+  var an       = document.getElementById('anFabricatie').value;
+  var perioada = document.getElementById('perioada').value;
+
+  if (!cc || !an || !perioada) {
+    document.getElementById('priceBox').style.display = 'none';
+    return;
+  }
+
+  var pretBaza    = getPretBaza(cc);
+  var coefVechime = getCoeficientVechime(an);
+  var coefPeriada = (perioada === '6') ? 0.55 : 1.0;
+
+  pretCalculat = Math.round(pretBaza * coefVechime * coefPeriada);
+
+  var vechime = new Date().getFullYear() - parseInt(an);
+
+  document.getElementById('pretAfisat').textContent = pretCalculat + ' RON';
+  document.getElementById('detaliu-perioada').textContent = perioada + ' luni';
+  document.getElementById('detaliu-cc').textContent = cc <= 3000 ? 'până la ' + cc + ' cc' : 'peste 3000 cc';
+  document.getElementById('detaliu-vechime').textContent = vechime + (vechime === 1 ? ' an' : ' ani');
+  document.getElementById('priceBox').style.display = 'block';
+}
+
+// ============================================================
+// SUBMIT FORMULAR
+// ============================================================
+document.getElementById('rcaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var fields = ['nume', 'telefon', 'email', 'marca', 'model', 'anFabricatie', 'capacitate', 'perioada'];
+  var valid = true;
+
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    el.classList.remove('error');
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      valid = false;
+    }
+  });
+
+  if (!valid) {
+    showMsg('msgBox', 'error', '❌ Completează toate câmpurile obligatorii!');
+    return;
+  }
+
+  if (pretCalculat === 0) {
+    showMsg('msgBox', 'error', '❌ Selectează cilindreea, anul și perioada pentru a calcula prețul.');
+    return;
+  }
+
+  var cerere = {
+    id: Date.now(),
+    nume:      document.getElementById('nume').value.trim(),
+    telefon:   document.getElementById('telefon').value.trim(),
+    email:     document.getElementById('email').value.trim(),
+    marca:     document.getElementById('marca').value,
+    model:     document.getElementById('model').value.trim(),
+    an:        document.getElementById('anFabricatie').value,
+    capacitate: document.getElementById('capacitate').value + ' cc',
+    perioada:  document.getElementById('perioada').value + ' luni',
+    pret:      pretCalculat,
+    status:    'În așteptare',
+    data:      new Date().toLocaleDateString('ro-RO') + ' ' + new Date().toLocaleTimeString('ro-RO', {hour:'2-digit',minute:'2-digit'})
+  };
+
+  salveazaCerere(cerere);
+
+  // Trimite email dacă EmailJS e configurat
+  if (CONFIG.publicKey && CONFIG.serviceId && CONFIG.templateId) {
+    var btn = document.getElementById('btnTrimite');
+    btn.disabled = true;
+    showMsg('msgBox', 'loading', '⏳ Se trimite oferta pe email...');
+
+    var params = {
+      to_email:   cerere.email,
+      nume:       cerere.nume,
+      marca:      cerere.marca,
+      model:      cerere.model,
+      an:         cerere.an,
+      capacitate: cerere.capacitate,
+      perioada:   cerere.perioada,
+      pret:       cerere.pret + ' RON',
+      telefon:    cerere.telefon
+    };
+
+    emailjs.send(CONFIG.serviceId, CONFIG.templateId, params)
+      .then(function() {
+        updateStatus(cerere.id, 'Trimis ofertă');
+        showMsg('msgBox', 'success', '✅ Oferta a fost trimisă pe email la ' + cerere.email + '!');
+        btn.disabled = false;
+
+        // Notificare broker
+        if (CONFIG.brokerEmail) {
+          var brokerParams = Object.assign({}, params, { to_email: CONFIG.brokerEmail, subiect_broker: 'Cerere nouă RCA — ' + cerere.nume });
+          emailjs.send(CONFIG.serviceId, CONFIG.templateId, brokerParams).catch(function(){});
+        }
+      })
+      .catch(function(err) {
+        showMsg('msgBox', 'error', '⚠️ Email-ul nu a putut fi trimis. Cererea a fost salvată. (' + (err.text || err) + ')');
+        btn.disabled = false;
+      });
+  } else {
+    showMsg('msgBox', 'success', '✅ Cerere salvată! Configurează EmailJS în tab-ul ⚙️ pentru trimitere automată.');
+  }
+});
+
+// ============================================================
+// STOCARE DATE (localStorage)
+// ============================================================
+function salveazaCerere(cerere) {
+  var cereri = getCereri();
+  cereri.unshift(cerere);
+  localStorage.setItem('rca_cereri', JSON.stringify(cereri));
+}
+
+function getCereri() {
+  try { return JSON.parse(localStorage.getItem('rca_cereri')) || []; }
+  catch(e) { return []; }
+}
+
+function updateStatus(id, status) {
+  var cereri = getCereri();
+  cereri.forEach(function(c) { if (c.id === id) c.status = status; });
+  localStorage.setItem('rca_cereri', JSON.stringify(cereri));
+}
+
+function clearAll() {
+  if (confirm('Ștergi toate cererile? Acțiunea nu poate fi anulată.')) {
+    localStorage.removeItem('rca_cereri');
+    incarcaDashboard();
+  }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function incarcaDashboard() {
+  var cereri = getCereri();
+  var total   = cereri.length;
+  var trimise = cereri.filter(function(c) { return c.status === 'Trimis ofertă'; }).length;
+  var mediu   = total > 0 ? Math.round(cereri.reduce(function(s,c){ return s + c.pret; }, 0) / total) : 0;
+
+  document.getElementById('statTotal').textContent   = total;
+  document.getElementById('statTrimise').textContent  = trimise;
+  document.getElementById('statMediu').textContent    = mediu;
+
+  var tbody = document.getElementById('tabelBody');
+  if (total === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" class="empty-msg">Nu există cereri încă.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = cereri.map(function(c, i) {
+    var badgeClass = c.status === 'Trimis ofertă' ? 'status-trimis' : 'status-asteptare';
+    return '<tr>' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td><strong>' + c.nume + '</strong></td>' +
+      '<td>' + c.telefon + '</td>' +
+      '<td>' + c.email + '</td>' +
+      '<td>' + c.marca + '</td>' +
+      '<td>' + c.model + '</td>' +
+      '<td>' + c.an + '</td>' +
+      '<td>' + c.capacitate + '</td>' +
+      '<td>' + c.perioada + '</td>' +
+      '<td><strong>' + c.pret + ' RON</strong></td>' +
+      '<td><span class="status-badge ' + badgeClass + '">' + c.status + '</span></td>' +
+      '<td>' + c.data + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+// ============================================================
+// UTILITARE
+// ============================================================
+function showMsg(id, type, text) {
+  var el = document.getElementById(id);
+  el.className = 'msg ' + type;
+  el.textContent = text;
+  el.style.display = 'block';
+  if (type === 'success') setTimeout(function(){ el.style.display='none'; }, 6000);
+}
+
+function resetForm() {
+  document.getElementById('rcaForm').reset();
+  document.getElementById('priceBox').style.display = 'none';
+  document.getElementById('msgBox').style.display = 'none';
+  pretCalculat = 0;
+  document.querySelectorAll('.error').forEach(function(el){ el.classList.remove('error'); });
+}
+
+// Init
+incarcaDashboard();
+</script>
+
+</body>
+</html>
