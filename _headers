@@ -1,0 +1,28 @@
+# Poze, video, audio - cache 1 an (nu se schimba niciodata)
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/video/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS si JS - cache 1 an
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Pagini HTML stiri - cache 4 ore (se pot actualiza)
+/*.html
+  Cache-Control: public, max-age=14400, s-maxage=86400
+
+# Homepage - cache 30 minute (se actualizeaza des cu stiri noi)
+/index.html
+  Cache-Control: public, max-age=1800, s-maxage=3600
+
+# Sitemap si robots - cache 1 zi
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
