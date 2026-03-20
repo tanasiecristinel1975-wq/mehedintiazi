@@ -42,21 +42,7 @@ async function addWatermark(imgPath) {
     const logoTargetHeight = Math.floor(logoTargetWidth * logoRatio);
     logo.resize({ w: logoTargetWidth, h: logoTargetHeight });
 
-    // Transforma logo: fundalul alb devine transparent, textul negru devine alb
-    logo.scan(0, 0, logo.bitmap.width, logo.bitmap.height, function(x, y, idx) {
-      const r = this.bitmap.data[idx];
-      const g = this.bitmap.data[idx + 1];
-      const b = this.bitmap.data[idx + 2];
-      if (r > 200 && g > 200 && b > 200) {
-        // Pixel alb (fundal) -> transparent
-        this.bitmap.data[idx + 3] = 0;
-      } else {
-        // Pixel inchis (text/desen) -> alb
-        this.bitmap.data[idx]     = 255;
-        this.bitmap.data[idx + 1] = 255;
-        this.bitmap.data[idx + 2] = 255;
-      }
-    });
+    // Logo-ul are deja fundal transparent si culori (albastru + portocaliu) — pastram culorile originale
 
     // Aplica opacitate
     logo.opacity(LOGO_OPACITY);
