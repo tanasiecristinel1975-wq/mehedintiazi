@@ -89,13 +89,40 @@
 </head>
 <body>
 
-<!-- HEADER -->
-<div id="header-placeholder"></div>
-<script>
-  fetch('header.html').then(r=>r.text()).then(h=>{
-    document.getElementById('header-placeholder').innerHTML=h;
-  });
-</script>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><img src="img/logo.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;" /></a>
+      <div class="header-banner" style="height:65px;overflow:hidden;border-radius:4px;">
+        <a href="https://mehedintiazi.ro" style="display:block;height:65px;line-height:0;">
+          <img src="img/banner-mehedintiazi.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;max-width:420px;object-fit:cover;object-position:center top;display:block;" />
+        </a>
+      </div>
+      <form class="header-search">
+        <input type="text" placeholder="Cauta stiri..." aria-label="Cauta" />
+        <button type="submit">&#128269;</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul class="nav-list" id="nav-list">
+      <li><a href="/">&#127968; Acasa</a></li>
+      <li class="activ"><a href="/actualitate">Actualitate</a></li>
+      <li><a href="/economic">Economic</a></li>
+      <li><a href="/social">Social</a></li>
+      <li><a href="/sport">Sport</a></li>
+      <li><a href="/cultura">Cultura &amp; Evenimente</a></li>
+      <li><a href="/cronica-negra">&#128682; Cronica</a></li>
+      <li><a href="/anunturi">Anunturi</a></li>
+      <li><a href="/horoscop" style="color:#c4b5fd;">&#10024; Horoscop</a></li>
+      <li><a href="live.html" style="color:#e74c3c;font-weight:900;">&#128309; LIVE</a></li>
+      <li style="margin-left:auto;"><a href="/publicitate" style="background:var(--auriu);color:#000;padding:13px 16px;">&#128276; Publicitate</a></li>
+    </ul>
+  </div>
+</nav>
 
 <div class="container article-page">
 
@@ -288,13 +315,34 @@
 
 </div><!-- /container -->
 
-<!-- FOOTER -->
-<div id="footer-placeholder"></div>
-<script>
-  fetch('footer.html').then(r=>r.text()).then(h=>{
-    document.getElementById('footer-placeholder').innerHTML=h;
-  });
-</script>
+<footer style="background:#0d1f35;color:#9bb3cc;padding:30px 0 20px;margin-top:40px;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-bottom:20px;">
+      <div>
+        <h5 style="color:#fff;font-family:Georgia,serif;margin-bottom:10px;">MehedintiAzi.ro</h5>
+        <p style="font-size:13px;line-height:1.6;">Stiri din Mehedinti si Drobeta-Turnu Severin. Informatii corecte si rapide din judetul tau.</p>
+      </div>
+      <div>
+        <h5 style="color:#fff;font-family:Georgia,serif;margin-bottom:10px;">Sectiuni</h5>
+        <ul style="list-style:none;padding:0;font-size:13px;">
+          <li><a href="/actualitate" style="color:#9bb3cc;text-decoration:none;">Actualitate</a></li>
+          <li><a href="/social" style="color:#9bb3cc;text-decoration:none;">Social</a></li>
+          <li><a href="/economic" style="color:#9bb3cc;text-decoration:none;">Economic</a></li>
+          <li><a href="/sport" style="color:#9bb3cc;text-decoration:none;">Sport</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 style="color:#fff;font-family:Georgia,serif;margin-bottom:10px;">Contact</h5>
+        <p style="font-size:13px;">redactie@mehedintiazi.ro</p>
+        <a href="https://www.facebook.com/profile.php?id=61588136442785" target="_blank" style="color:#9bb3cc;font-size:13px;">Facebook MehedintiAzi.ro</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid #1a3a5c;padding-top:15px;text-align:center;font-size:12px;">
+      &copy; 2026 MehedintiAzi.ro — Toate drepturile rezervate
+    </div>
+  </div>
+</footer>
 
+<script src="js/script.js"></script>
 </body>
 </html>
