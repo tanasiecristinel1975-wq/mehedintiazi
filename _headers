@@ -12,13 +12,13 @@
 /js/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Pagini HTML stiri - cache 4 ore (se pot actualiza)
+# Pagini HTML stiri - fara cache pe CDN, intotdeauna fresh
 /*.html
-  Cache-Control: public, max-age=14400, s-maxage=86400
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
 
-# Homepage - cache 30 minute (se actualizeaza des cu stiri noi)
+# Homepage - fara cache pe CDN
 /index.html
-  Cache-Control: public, max-age=1800, s-maxage=3600
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
 
 # Sitemap si robots - cache 1 zi
 /sitemap.xml
@@ -26,3 +26,4 @@
 
 /robots.txt
   Cache-Control: public, max-age=86400
+<!-- redeploy Fri, Mar 27, 2026  7:51:50 PM -->
