@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-67X58CLV15"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-67X58CLV15');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Căutare - MehedintiAzi.ro</title>
+  <meta name="description" content="Caută știri locale din județul Mehedinți pe MehedintiAzi.ro" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({ appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2" });
+    });
+  </script>
+  <style>
+    .search-page { padding: 40px 0; min-height: 60vh; }
+    .search-page h1 { font-size: 24px; margin-bottom: 20px; color: #1a3a5c; }
+    .gcse-search { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-data"><span id="data-ora">Se incarca...</span></div>
+    <div class="topbar-links">
+      <a href="/contact">Contact</a>
+      <a href="/publicitate">Publicitate</a>
+      <a href="/despre-noi">Despre noi</a>
+      <a href="https://www.facebook.com/profile.php?id=61588136442785" target="_blank">&#128100; Facebook</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><img src="img/logo.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;" /></a>
+      <div class="header-banner" style="height:65px;overflow:hidden;border-radius:4px;">
+        <a href="/" style="display:block;height:65px;line-height:0;">
+          <img src="img/banner-mehedintiazi.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;max-width:420px;object-fit:cover;display:block;" />
+        </a>
+      </div>
+      <form class="header-search" action="/cautare.html" method="get">
+        <input type="text" name="q" placeholder="Cauta stiri..." aria-label="Cauta" />
+        <button type="submit">&#128269;</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul class="nav-list">
+      <li><a href="/">&#127968; Acasa</a></li>
+      <li><a href="/actualitate">Actualitate</a></li>
+      <li><a href="/economic">Economic</a></li>
+      <li><a href="/social">Social</a></li>
+      <li><a href="/sport">Sport</a></li>
+      <li><a href="/cultura">Cultura &amp; Evenimente</a></li>
+      <li><a href="/cronica-negra">&#128682; Cronica</a></li>
+      <li><a href="/anunturi">Anunturi</a></li>
+      <li><a href="/horoscop" style="color:#c4b5fd;">&#10024; Horoscop</a></li>
+      <li><a href="live.html" style="color:#e74c3c;font-weight:900;">&#128309; LIVE</a></li>
+      <li style="margin-left:auto;"><a href="/publicitate" style="background:var(--auriu);color:#000;padding:13px 16px;">&#128276; Publicitate</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container search-page">
+  <h1>&#128269; Rezultate căutare</h1>
+  <script async src="https://cse.google.com/cse.js?cx=521a231f0c62c44b9"></script>
+  <div class="gcse-search"></div>
+</div>
+
+<footer style="background:#1a3a5c;color:#fff;padding:30px 0;margin-top:40px;">
+  <div class="container" style="text-align:center;">
+    <p>&copy; 2026 MehedintiAzi.ro — Toate drepturile rezervate</p>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
