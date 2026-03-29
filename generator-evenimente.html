@@ -159,6 +159,15 @@ h1 { text-align: center; color: #2c3e50; margin-bottom: 24px; font-size: 24px; }
   .toolbar { flex-direction: column; align-items: flex-start; }
 }
 </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2",
+    });
+  });
+</script>
 </head>
 <body>
 

@@ -55,6 +55,15 @@
     .similar-img { width: 100%; height: 120px; background: linear-gradient(135deg, #1a3a5c, #2c5f8a); overflow: hidden; }
     .similar-img img { width: 100%; height: 100%; object-fit: cover; }
   </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2",
+    });
+  });
+</script>
 </head>
 <body>
 
