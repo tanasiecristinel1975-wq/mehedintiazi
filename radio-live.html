@@ -18,6 +18,7 @@
   <meta property="og:image" content="https://www.mehedintiazi.ro/img/radio-logo.png" />
   <meta property="og:url" content="https://www.mehedintiazi.ro/radio-live" />
   <meta property="og:type" content="website" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
     body { background: #0a1628; min-height: 100vh; margin: 0; }
@@ -161,6 +162,16 @@
       .radio-name { font-size: 22px; }
     }
   </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2",
+    });
+  });
+</script>
+  <link rel="alternate" type="application/rss+xml" title="MehedintiAzi.ro RSS" href="/feed.xml" />
 </head>
 <body>
 

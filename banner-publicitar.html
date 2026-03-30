@@ -152,6 +152,16 @@
 
     .label { font-size: 13px; color: #555; font-weight: 700; }
   </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2",
+    });
+  });
+</script>
+  <link rel="alternate" type="application/rss+xml" title="MehedintiAzi.ro RSS" href="/feed.xml" />
 </head>
 <body>
 
