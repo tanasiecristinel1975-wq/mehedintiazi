@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-67X58CLV15"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-67X58CLV15');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant Cambera Drobeta-Turnu Severin — Mâncare, Evenimente, Rezervări</title>
+  <meta name="description" content="Restaurant Cambera din Drobeta-Turnu Severin — mâncare tradițională și internațională, evenimente private, nunți, botezuri. Rezervări: 0743 595 466 / 0723 004 015." />
+  <meta name="keywords" content="restaurant Cambera Drobeta-Turnu Severin, restaurant Severin, nunti Severin, botezuri Severin, mâncare Drobeta, evenimente private Mehedinti, rezervari restaurant Cambera" />
+  <meta name="author" content="Restaurant Cambera" />
+  <link rel="canonical" href="https://www.mehedintiazi.ro/restaurant-cambera" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Restaurant Cambera Drobeta-Turnu Severin — Mâncare, Evenimente, Rezervări" />
+  <meta property="og:description" content="Savurați cele mai bune preparate în Restaurant Cambera din Drobeta-Turnu Severin. Nunți, botezuri, evenimente private. Rezervări: 0743 595 466." />
+  <meta property="og:url" content="https://www.mehedintiazi.ro/restaurant-cambera" />
+  <meta property="og:site_name" content="MehedintiAzi.ro" />
+  <meta property="og:image" content="https://www.mehedintiazi.ro/img/cambera-sala-aranjament-floral.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Restaurant Cambera",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Drobeta-Turnu Severin",
+      "addressRegion": "Mehedinți",
+      "addressCountry": "RO"
+    },
+    "telephone": ["+40743595466", "+40723004015"],
+    "url": "https://www.mehedintiazi.ro/restaurant-cambera",
+    "image": "https://www.mehedintiazi.ro/img/cambera-sala-aranjament-floral.jpg",
+    "servesCuisine": ["Bucătărie românească", "Bucătărie internațională"],
+    "priceRange": "$$"
+  }
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Hero */
+    .cambera-hero {
+      position: relative;
+      height: 480px;
+      overflow: hidden;
+      background: #111;
+    }
+    .cambera-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+    }
+    .cambera-hero-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.65));
+    }
+    .cambera-hero-overlay h1 {
+      font-family: Georgia, serif;
+      font-size: 42px;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+      margin-bottom: 12px;
+    }
+    .cambera-hero-overlay p {
+      font-size: 18px;
+      color: #f0e6c8;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+      max-width: 600px;
+      margin-bottom: 22px;
+    }
+    .cambera-cta-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cambera-cta-btns a {
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .btn-rezerva {
+      background: #c0392b;
+      color: #fff;
+    }
+    .btn-tel {
+      background: #fff;
+      color: #111;
+    }
+    .btn-rezerva:hover { background: #a93226; color: #fff; }
+    .btn-tel:hover { background: #f0f0f0; color: #111; }
+
+    /* Contact bar */
+    .cambera-contact-bar {
+      background: #1a3a5c;
+      color: #fff;
+      padding: 14px 0;
+      text-align: center;
+      font-size: 16px;
+    }
+    .cambera-contact-bar a {
+      color: #f5a623;
+      font-weight: 700;
+      text-decoration: none;
+      margin: 0 12px;
+    }
+    .cambera-contact-bar a:hover { text-decoration: underline; }
+
+    /* Section title */
+    .cambera-section { padding: 40px 0; }
+    .section-title {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      color: #1a3a5c;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: #c0392b;
+      margin: 0 auto 30px;
+    }
+
+    /* Galerie grid */
+    .galerie-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .galerie-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      aspect-ratio: 4/3;
+      background: #eee;
+    }
+    .galerie-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .galerie-item:hover img { transform: scale(1.05); }
+    .galerie-item .label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: #fff;
+      font-size: 13px;
+      padding: 20px 10px 8px;
+      text-align: center;
+    }
+
+    /* Meniu cards */
+    .meniu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .meniu-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .meniu-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .meniu-card-body {
+      padding: 14px;
+    }
+    .meniu-card-body h3 {
+      font-size: 16px;
+      color: #1a3a5c;
+      margin-bottom: 6px;
+      font-family: Georgia, serif;
+    }
+    .meniu-card-body p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Evenimente */
+    .evenimente-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .eveniment-card {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 280px;
+    }
+    .eveniment-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .eveniment-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+    .eveniment-overlay h3 {
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+    .eveniment-overlay p {
+      color: #ddd;
+      font-size: 14px;
+    }
+
+    /* Info box */
+    .cambera-info-box {
+      background: #1a3a5c;
+      color: #fff;
+      border-radius: 8px;
+      padding: 35px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .cambera-info-box h3 {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      color: #f5a623;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .cambera-info-box p, .cambera-info-box li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #d0dde8;
+    }
+    .cambera-info-box ul { padding-left: 18px; }
+    .cambera-info-box a { color: #f5a623; font-weight: 700; text-decoration: none; }
+
+    /* CTA final */
+    .cambera-cta-final {
+      background: #c0392b;
+      color: #fff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .cambera-cta-final h2 {
+      font-family: Georgia, serif;
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .cambera-cta-final p {
+      font-size: 18px;
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+    .cambera-cta-final a {
+      display: inline-block;
+      background: #fff;
+      color: #c0392b;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 14px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      margin: 6px;
+    }
+    .cambera-cta-final a:hover { background: #f0f0f0; }
+
+    @media (max-width: 768px) {
+      .cambera-hero { height: 320px; }
+      .cambera-hero-overlay h1 { font-size: 26px; }
+      .galerie-grid { grid-template-columns: repeat(2, 1fr); }
+      .meniu-grid { grid-template-columns: 1fr; }
+      .evenimente-grid { grid-template-columns: 1fr; }
+      .cambera-info-box { grid-template-columns: 1fr; padding: 25px 20px; }
+    }
+  </style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9376764668171652" crossorigin="anonymous"></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({ appId: "2e6f20be-5714-4e65-abbe-dd218bd3b3b2" });
+  });
+</script>
+<link rel="alternate" type="application/rss+xml" title="MehedintiAzi.ro RSS" href="/feed.xml" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-data"><span id="data-ora">Se incarca...</span></div>
+    <div class="topbar-links">
+      <a href="/contact">Contact</a>
+      <a href="/publicitate">Publicitate</a>
+      <a href="/despre-noi">Despre noi</a>
+      <a href="https://www.facebook.com/profile.php?id=61588136442785" target="_blank">&#128100; Facebook</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo"><img src="img/logo.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;" /></a>
+      <div class="header-banner" style="height:65px;overflow:hidden;border-radius:4px;">
+        <a href="https://mehedintiazi.ro" style="display:block;height:65px;line-height:0;">
+          <img src="img/banner-mehedintiazi.jpg" alt="MehedintiAzi.ro" style="height:65px;width:auto;max-width:420px;object-fit:cover;object-position:center top;display:block;" />
+        </a>
+      </div>
+      <form class="header-search" action="/cautare.html" method="get">
+        <input type="text" name="q" placeholder="Cauta stiri..." aria-label="Cauta" />
+        <button type="submit">&#128269;</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul class="nav-list" id="nav-list">
+      <li><a href="/">&#127968; Acasa</a></li>
+      <li><a href="/actualitate">Actualitate</a></li>
+      <li><a href="/economic">Economic</a></li>
+      <li><a href="/social">Social</a></li>
+      <li><a href="/sport">Sport</a></li>
+      <li><a href="/cultura">Cultura &amp; Evenimente</a></li>
+      <li><a href="/cronica-negra">&#128682; Cronica</a></li>
+      <li><a href="/anunturi">Anunturi</a></li>
+      <li><a href="/horoscop" style="color:#c4b5fd;">&#10024; Horoscop</a></li>
+      <li><a href="live.html" style="color:#e74c3c;font-weight:900;">&#128309; LIVE</a></li>
+      <li style="margin-left:auto;"><a href="/publicitate" style="background:var(--auriu);color:#000;padding:13px 16px;">&#128276; Publicitate</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="cambera-hero">
+  <img src="img/cambera-sala-aranjament-floral.jpg" alt="Restaurant Cambera Drobeta-Turnu Severin — sală elegantă cu aranjamente florale" />
+  <div class="cambera-hero-overlay">
+    <h1>Restaurant Cambera</h1>
+    <p>Drobeta-Turnu Severin — Gastronomie, Eleganță și Evenimente de Neuitat</p>
+    <div class="cambera-cta-btns">
+      <a href="tel:+40743595466" class="btn-rezerva">📞 Rezervă acum</a>
+      <a href="#galerie" class="btn-tel">📸 Vezi galeria</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT BAR -->
+<div class="cambera-contact-bar">
+  📍 Drobeta-Turnu Severin &nbsp;|&nbsp;
+  <a href="tel:+40743595466">0743 595 466</a>
+  <a href="tel:+40723004015">0723 004 015</a>
+</div>
+
+<!-- ABOUT -->
+<div class="cambera-section" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Bine ați venit la Cambera</h2>
+    <div class="section-divider"></div>
+    <p style="text-align:center;font-size:17px;color:#444;max-width:750px;margin:0 auto;line-height:1.8;">
+      Restaurant Cambera este una dintre cele mai apreciate destinații culinare din <strong>Drobeta-Turnu Severin</strong>.
+      Vă oferim preparate tradiționale românești și internaționale, o ambianță elegantă și servicii de top pentru
+      <strong>nunți, botezuri, cumătrii și evenimente corporate</strong>. Fiecare detaliu este gândit pentru ca momentele
+      petrecute alături de noi să fie cu adevărat memorabile.
+    </p>
+  </div>
+</div>
+
+<!-- GALERIE -->
+<div class="cambera-section" id="galerie" style="background:#f7f7f7;">
+  <div class="container">
+    <h2 class="section-title">Galerie Foto</h2>
+    <div class="section-divider"></div>
+    <div class="galerie-grid">
+      <div class="galerie-item">
+        <img src="img/cambera-sala-aranjament-floral.jpg" alt="Sală elegantă cu aranjamente florale Restaurant Cambera" loading="lazy" />
+        <div class="label">Sală de evenimente</div>
+      </div>
+      <div class="galerie-item">
+        <img src="img/cambera-sala-lumanari-elegante.jpg" alt="Decor cu lumânări și flori albe Restaurant Cambera" loading="lazy" />
+        <div class="label">Decor de lux</div>
+      </div>
+      <div class="galerie-item">
+        <img src="img/cambera-dans-miri-artificii.jpg" alt="Dans miri cu artificii Restaurant Cambera" loading="lazy" />
+        <div class="label">Nuntă de vis</div>
+      </div>
+      <div class="galerie-item">
+        <img src="img/cambera-terasa-exterior-decor.jpg" alt="Terasa exterioară Restaurant Cambera" loading="lazy" />
+        <div class="label">Terasă exterioară</div>
+      </div>
+      <div class="galerie-item">
+        <img src="img/cambera-eveniment-traditional.jpg" alt="Eveniment tradițional românesc Restaurant Cambera" loading="lazy" />
+        <div class="label">Evenimente tradiționale</div>
+      </div>
+      <div class="galerie-item">
+        <img src="img/cambera-bere-draft.jpg" alt="Bere draft Staropramen Restaurant Cambera" loading="lazy" />
+        <div class="label">Bar & Băuturi</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MENIU -->
+<div class="cambera-section" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Specialitățile Casei</h2>
+    <div class="section-divider"></div>
+    <div class="meniu-grid">
+      <div class="meniu-card">
+        <img src="img/cambera-salata-traditionala.jpg" alt="Salată tradițională Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Salată Tradițională</h3>
+          <p>Ingrediente proaspete, brânză rasă, ouă fierte și măsline — un clasic al bucătăriei românești.</p>
+        </div>
+      </div>
+      <div class="meniu-card">
+        <img src="img/cambera-paste-carbonara.jpg" alt="Paste Carbonara Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Paste Carbonara</h3>
+          <p>Spaghete cremose, bacon afumat și parmezan — preparate după rețeta italiană autentică.</p>
+        </div>
+      </div>
+      <div class="meniu-card">
+        <img src="img/cambera-pizza.jpg" alt="Pizza Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Pizza</h3>
+          <p>Blat crocant, sos de roșii, mozzarella topită și topping-uri variate — pizza ca-n Italia.</p>
+        </div>
+      </div>
+      <div class="meniu-card">
+        <img src="img/cambera-caracatita-rosii.jpg" alt="Caracatiță cu roșii cherry Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Caracatiță cu Roșii Cherry</h3>
+          <p>Fructe de mare gătite la tigaie cu roșii cherry și sos aromat — specialitatea bucătarului.</p>
+        </div>
+      </div>
+      <div class="meniu-card">
+        <img src="img/cambera-supa-crema.jpg" alt="Supă cremă Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Supă Cremă</h3>
+          <p>Supă fină cu ulei de măsline și ierburi aromate — caldă și reconfortantă în orice sezon.</p>
+        </div>
+      </div>
+      <div class="meniu-card">
+        <img src="img/cambera-desert-gogosi.jpg" alt="Desert gogosi cu sos Restaurant Cambera" loading="lazy" />
+        <div class="meniu-card-body">
+          <h3>Desert — Gogoși cu Sos</h3>
+          <p>Gogoși pufoase cu sos de fructe de pădure și frișcă — finala perfectă pentru orice masă.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EVENIMENTE -->
+<div class="cambera-section" style="background:#f7f7f7;">
+  <div class="container">
+    <h2 class="section-title">Evenimente la Cambera</h2>
+    <div class="section-divider"></div>
+    <div class="evenimente-grid">
+      <div class="eveniment-card">
+        <img src="img/cambera-dans-miri-artificii.jpg" alt="Nuntă Restaurant Cambera Drobeta" loading="lazy" />
+        <div class="eveniment-overlay">
+          <h3>Nunți</h3>
+          <p>Sala elegantă, artificii, decor personalizat și servicii complete pentru ziua cea mare.</p>
+        </div>
+      </div>
+      <div class="eveniment-card">
+        <img src="img/cambera-sala-lumanari-elegante.jpg" alt="Eveniment privat Restaurant Cambera" loading="lazy" />
+        <div class="eveniment-overlay">
+          <h3>Botezuri &amp; Cumătrii</h3>
+          <p>Atmosferă caldă, mâncare delicioasă și amintiri de neuitat alături de cei dragi.</p>
+        </div>
+      </div>
+      <div class="eveniment-card">
+        <img src="img/cambera-terasa-exterior-decor.jpg" alt="Terasa evenimente Restaurant Cambera" loading="lazy" />
+        <div class="eveniment-overlay">
+          <h3>Evenimente pe Terasă</h3>
+          <p>Terasă amenajată cu decor floral pentru petreceri în aer liber în sezonul cald.</p>
+        </div>
+      </div>
+      <div class="eveniment-card">
+        <img src="img/cambera-eveniment-traditional.jpg" alt="Eveniment tradițional Restaurant Cambera" loading="lazy" />
+        <div class="eveniment-overlay">
+          <h3>Evenimente Tradiționale</h3>
+          <p>Mâncare gătită tradițional, muzică populară și atmosfera autentică a satului românesc.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFO & CONTACT -->
+<div class="cambera-section" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Informații Utile</h2>
+    <div class="section-divider"></div>
+    <div class="cambera-info-box">
+      <div>
+        <h3>📞 Contact & Rezervări</h3>
+        <p>
+          <strong>Telefon:</strong><br />
+          <a href="tel:+40743595466">0743 595 466</a><br />
+          <a href="tel:+40723004015">0723 004 015</a>
+        </p>
+        <p style="margin-top:16px;">
+          <strong>Locație:</strong><br />
+          Drobeta-Turnu Severin, Mehedinți
+        </p>
+      </div>
+      <div>
+        <h3>🍽️ Ce Oferim</h3>
+        <ul>
+          <li>Mâncare tradițională românească</li>
+          <li>Specialități internaționale</li>
+          <li>Organizare nunți și botezuri</li>
+          <li>Evenimente corporate</li>
+          <li>Terasă pentru sezonul cald</li>
+          <li>Bar cu băuturi premium</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<div class="cambera-cta-final">
+  <h2>Faceți o Rezervare Acum</h2>
+  <p>Sunați-ne și lăsați-ne să transformăm momentul vostru într-o amintire de neuitat.</p>
+  <a href="tel:+40743595466">📞 0743 595 466</a>
+  <a href="tel:+40723004015">📞 0723 004 015</a>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>MehedintiAzi.ro</h4>
+        <p>Stiri din Mehedinti si Drobeta-Turnu Severin.</p>
+      </div>
+      <div>
+        <h4>Categorii</h4>
+        <ul>
+          <li><a href="/actualitate">Actualitate</a></li>
+          <li><a href="/economic">Economic</a></li>
+          <li><a href="/social">Social</a></li>
+          <li><a href="/sport">Sport</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informatii</h4>
+        <ul>
+          <li><a href="/despre-noi">Despre noi</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/publicitate">Publicitate</a></li>
+          <li><a href="/politica-de-confidentialitate">Politica de confidentialitate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Social Media</h4>
+        <ul>
+          <li><a href="https://www.facebook.com/profile.php?id=61588136442785" target="_blank">Facebook</a></li>
+          <li><a href="/feed.xml">RSS Feed</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MehedintiAzi.ro — Toate drepturile rezervate.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
