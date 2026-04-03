@@ -19,9 +19,8 @@ echo [3/4] Commit...
 set /p MSG=Titlu scurt stire (pentru commit):
 git commit -m "%MSG%"
 
-echo [4/4] Push pe GitHub + Cloudflare (master + main)...
-git push origin master
-git push origin master:main
+echo [4/4] Push pe GitHub + Cloudflare (direct pe main)...
+git push origin main
 
 echo.
 echo ================================================
