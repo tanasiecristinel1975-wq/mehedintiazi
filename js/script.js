@@ -241,6 +241,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ----------------------------------------------------------
+  // BANNER IMPACT PROMO - 300x250 in sidebar
+  // ----------------------------------------------------------
+  var sidebars2 = document.querySelectorAll('.sidebar');
+  if (sidebars2.length > 0) {
+    var impactSidebarHTML = `
+      <div class="sidebar-widget" style="padding:0;overflow:hidden;border:1px solid #ddd;">
+        <div style="font-size:10px;color:#aaa;text-align:center;padding:3px 0;background:#f9f9f9;">Publicitate</div>
+        <a href="/advertorial-bannere-publicitare-impact-promo-2026.html" title="Metoda Old School care bate reclamele online la cost"
+           style="display:block;position:relative;height:200px;overflow:hidden;text-decoration:none;">
+          <img src="/img/impact-promo-bannere-publicitare-reclama-2026.jpg"
+               alt="Impact Promo bannere publicitare"
+               style="width:100%;height:100%;object-fit:cover;filter:brightness(0.35);display:block;" />
+          <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;text-align:center;box-sizing:border-box;">
+            <div style="background:#e74c3c;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Publicitate</div>
+            <div style="font-size:16px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.2;margin-bottom:6px;">Metoda <span style="color:#e74c3c;">„Old School"</span> care bate reclamele online</div>
+            <div style="font-size:10px;color:#ccc;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Tot mai mulți antreprenori o folosesc</div>
+            <div style="background:#e74c3c;color:#fff;font-size:11px;font-weight:700;padding:8px 18px;border-radius:3px;text-transform:uppercase;">Citește mai mult »</div>
+          </div>
+        </a>
+      </div>`;
+    sidebars2.forEach(function(sb) {
+      sb.insertAdjacentHTML('beforeend', impactSidebarHTML);
+    });
+  }
+
+  // ----------------------------------------------------------
+  // BANNER IMPACT PROMO - 728x90 sub navbar
+  // ----------------------------------------------------------
+  var mainNav = document.querySelector('nav.main-nav');
+  if (mainNav) {
+    var impact728HTML = `
+      <div style="background:#111;width:100%;overflow:hidden;">
+        <div style="max-width:1200px;margin:0 auto;padding:0 15px;">
+          <a href="/advertorial-bannere-publicitare-impact-promo-2026.html"
+             style="display:flex;align-items:center;height:60px;position:relative;overflow:hidden;text-decoration:none;gap:20px;">
+            <img src="/img/impact-promo-bannere-publicitare-reclama-2026.jpg"
+                 alt="Impact Promo"
+                 style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.25);pointer-events:none;" />
+            <div style="position:relative;z-index:2;flex:1;min-width:0;">
+              <span style="font-size:15px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.5px;">
+                Metoda <span style="color:#e74c3c;">„Old School"</span> care bate reclamele online la cost
+              </span>
+              <span style="font-size:11px;color:#aaa;margin-left:12px;text-transform:uppercase;letter-spacing:0.5px;">Tot mai mulți antreprenori o folosesc</span>
+            </div>
+            <div style="position:relative;z-index:2;background:#e74c3c;color:#fff;font-size:12px;font-weight:700;padding:9px 20px;border-radius:3px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;">
+              Citește articolul »
+            </div>
+          </a>
+        </div>
+      </div>`;
+    mainNav.insertAdjacentHTML('afterend', impact728HTML);
+  }
+
   window.radioToggle = function() {
     var audio = document.getElementById('radio-audio');
     var btn = document.getElementById('radio-btn');
