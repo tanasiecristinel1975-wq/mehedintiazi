@@ -1,0 +1,38 @@
+============================================================
+  COMPLETEAZĂ CÂMPURILE DE MAI JOS PENTRU ȘTIREA TA
+  Apoi rulează: GENEREAZA-SI-PUBLICA.bat
+============================================================
+
+TITLU:
+Scrie titlul complet al știrii aici
+
+DATA:
+16 mai 2026
+
+ORA:
+10:00
+
+CATEGORIE:
+Actualitate
+
+POZA:
+nume-poza.jpg
+
+TEXT:
+Scrie primul paragraf al știrii aici. Minimum 2-3 propoziții. Poți folosi *cuvânt* pentru a scrie cu bold.
+
+Scrie al doilea paragraf aici. Lasă o linie goală între paragrafe.
+
+== Subtitlu secțiune (opțional) ==
+Scrie text după subtitlu.
+
+Continuă cu mai multe paragrafe dacă ai nevoie.
+
+TAGURI:
+tag1, tag2, tag3, Mehedinți, 2026
+
+============================================================
+  CATEGORII DISPONIBILE (copiază exact una):
+  Actualitate / Ordine Publică / Sănătate / Cultură /
+  Sport / Politică / Economie / Educație / Meteo
+============================================================
