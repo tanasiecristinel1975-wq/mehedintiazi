@@ -4,32 +4,43 @@
 ============================================================
 
 TITLU:
-Scrie titlul complet al știrii aici
+BMW X4 în valoare de 100.000 de lei, căutat de autoritățile elvețiene, descoperit la PTF Porțile de Fier I
 
 DATA:
-16 mai 2026
+18 mai 2026
 
 ORA:
-10:00
+11:00
 
 CATEGORIE:
-Actualitate
+Ordine Publică
 
 POZA:
-nume-poza.jpg
+bmw-x4-cautat-elvetia-portile-de-fier-1-mehedinti-2026.jpg
 
 TEXT:
-Scrie primul paragraf al știrii aici. Minimum 2-3 propoziții. Poți folosi *cuvânt* pentru a scrie cu bold.
+Polițiștii de frontieră din cadrul *Punctului de Trecere al Frontierei Porțile de Fier I*, județul Mehedinți, au reușit vineri seara să depisteze un autoturism de lux căutat de autoritățile elvețiene. Mijlocul de transport, un *BMW X4 roșu*, evaluat la aproximativ *100.000 de lei*, a fost indisponibilizat imediat, iar cercetările sunt în curs de desfășurare.
 
-Scrie al doilea paragraf aici. Lasă o linie goală între paragrafe.
+== O femeie de 33 de ani, la volanul mașinii căutate ==
 
-== Subtitlu secțiune (opțional) ==
-Scrie text după subtitlu.
+În data de *16 mai 2026, în jurul orei 20:40*, la PTF Porțile de Fier I s-a prezentat pentru controlul de frontieră o *femeie în vârstă de 33 de ani*, aflată la volanul unui autoturism. Procedura de rutină a luat o turnură neașteptată în momentul în care polițiștii de frontieră au efectuat verificările specifice în bazele de date naționale și internaționale.
 
-Continuă cu mai multe paragrafe dacă ai nevoie.
+Verificările au relevat că autoturismul condus de femeie figura ca *bun căutat*, printr-o alertă emisă de *autoritățile din Elveția*. Semnalarea era activă în sistemele de informații internaționale la care România are acces prin intermediul cooperării europene în domeniul ordinii publice.
+
+== Autoturism indisponibilizat, cercetări în curs ==
+
+Drept urmare, polițiștii de frontieră mehedințeni au procedat conform procedurilor legale: *autoturismul a fost indisponibilizat* la sediul *Sectorului Poliției de Frontieră Drobeta Turnu Severin*, unde va rămâne până la finalizarea cercetărilor.
+
+Cazul a fost preluat de anchetatori, care vor stabili împrejurările în care vehiculul a ajuns în posesia șoferiței, legătura acesteia cu semnalarea elvețiană, precum și eventualele infracțiuni săvârșite. La finalizarea verificărilor, urmează să fie dispuse *măsurile legale care se impun*, atât față de autoturism, cât și față de persoana implicată.
+
+== Cooperare internațională eficientă la frontieră ==
+
+Acest caz ilustrează eficiența *cooperării internaționale în domeniul poliției de frontieră* și importanța verificărilor sistematice efectuate la punctele de trecere. Accesul la bazele de date europene permite polițiștilor de frontieră români să identifice în timp real bunuri și persoane semnalate de autoritățile altor state membre sau state partenere, inclusiv din afara Uniunii Europene, precum Elveția.
+
+*Polițiștii de frontieră din Mehedinți* au demonstrat încă o dată că vigilența și profesionalismul în exercitarea atribuțiilor de serviciu contribuie direct la combaterea criminalității transfrontaliere și la protejarea ordinii publice la nivel european.
 
 TAGURI:
-tag1, tag2, tag3, Mehedinți, 2026
+BMW X4 cautat, Portile de Fier I, politia de frontiera Mehedinti, autoturism cautat Elvetia, PTF Portile de Fier I, Drobeta Turnu Severin, frontiera Mehedinti, cooperare internationala politie, bun cautat frontiera, 2026
 
 ============================================================
   CATEGORII DISPONIBILE (copiază exact una):
