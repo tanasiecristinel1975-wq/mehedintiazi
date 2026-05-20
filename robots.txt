@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 
+# ============================================================
+# BLOCAT: Boti AI care scrapiaza continut fara permisiune
+# ============================================================
+
 User-agent: Amazonbot
 Disallow: /
 
@@ -25,4 +29,57 @@ Disallow: /
 User-agent: meta-externalagent
 Disallow: /
 
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# ============================================================
+# PERMIS: Motoare de cautare legitime
+# ============================================================
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
 Sitemap: https://mehedintiazi.ro/sitemap.xml
+Sitemap: https://www.mehedintiazi.ro/sitemap.xml

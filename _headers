@@ -1,3 +1,30 @@
+# ============================================================
+# SECURITY HEADERS — MehedintiAzi.ro
+# ============================================================
+
+# Toate paginile — security headers globale
+/*
+  # HSTS — forteaza HTTPS 1 an, includeSubdomains
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # Previne clickjacking (iframe injection)
+  X-Frame-Options: SAMEORIGIN
+  # Previne MIME sniffing
+  X-Content-Type-Options: nosniff
+  # XSS Protection (browser legacy)
+  X-XSS-Protection: 1; mode=block
+  # Limiteaza ce informatii trimitem catre alte site-uri
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Dezactiveaza functii browser nefolosite
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  # Ascunde ca e Cloudflare Pages (reduce attack surface)
+  X-Powered-By: MehedintiAzi
+  # Previne deschiderea fisierelor periculoase descarcate
+  X-Download-Options: noopen
+
+# ============================================================
+# CACHE CONTROL
+# ============================================================
+
 # Poze, video, audio - cache 1 an (nu se schimba niciodata)
 /img/*
   Cache-Control: public, max-age=31536000, immutable
@@ -12,12 +39,16 @@
 /js/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Pagini HTML stiri - fara cache pe CDN, intotdeauna fresh
+# Fonturi
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Pagini HTML - fara cache pe CDN, intotdeauna fresh
 /*.html
   Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
 
 # Homepage - fara cache pe CDN
-/index.html
+/
   Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
 
 # Sitemap si robots - cache 1 zi
@@ -26,4 +57,7 @@
 
 /robots.txt
   Cache-Control: public, max-age=86400
-<!-- redeploy Fri, Mar 27, 2026  7:51:50 PM -->
+
+# Security.txt - cache 1 zi
+/.well-known/security.txt
+  Cache-Control: public, max-age=86400

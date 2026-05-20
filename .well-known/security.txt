@@ -1,0 +1,5 @@
+Contact: mailto:redactie@mehedintiazi.ro
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: ro, en
+Canonical: https://www.mehedintiazi.ro/.well-known/security.txt
+Policy: Dacă descoperiți o vulnerabilitate de securitate pe MehedintiAzi.ro, vă rugăm să ne contactați înainte de divulgare publică.
