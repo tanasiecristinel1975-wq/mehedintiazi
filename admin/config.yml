@@ -1,0 +1,66 @@
+backend:
+  name: github
+  repo: tanasiecristinel1975-wq/mehedintiazi
+  branch: main
+  auth_type: pkce
+  app_id: PUNE_AICI_GITHUB_OAUTH_APP_CLIENT_ID
+
+locale: ro
+media_folder: img
+public_folder: /img
+
+collections:
+  - name: stiri
+    label: "Știri"
+    label_singular: "Știre"
+    folder: _stiri
+    create: true
+    delete: false
+    slug: "{{slug}}-{{year}}"
+    summary: "{{title}} ({{date}})"
+    fields:
+      - label: "Titlu"
+        name: "title"
+        widget: "string"
+        hint: "Titlul complet al știrii – minim 40 de caractere pentru SEO"
+
+      - label: "Data publicării"
+        name: "date"
+        widget: "datetime"
+        date_format: "DD-MM-YYYY"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DDTHH:mm:ss"
+        default: ""
+
+      - label: "Categorie"
+        name: "categorie"
+        widget: "select"
+        options:
+          - "Actualitate"
+          - "Ordine Publică"
+          - "Social"
+          - "Economic"
+          - "Sport"
+          - "Cultură"
+          - "Educație"
+          - "Meteo"
+        default: "Actualitate"
+
+      - label: "Foto principală"
+        name: "poza"
+        widget: "image"
+        hint: "Imaginea de copertă – va fi salvată automat în folderul img/"
+
+      - label: "Taguri SEO"
+        name: "taguri"
+        widget: "list"
+        hint: "Adaugă taguri relevante, ex: politie, mehedinti, 2026"
+        field:
+          label: "Tag"
+          name: "tag"
+          widget: "string"
+
+      - label: "Text articol"
+        name: "body"
+        widget: "markdown"
+        hint: "Scrie textul articolului. Poți folosi **bold**, ## Subtitluri și lista cu -"
