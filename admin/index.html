@@ -1,14 +1,585 @@
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin – MehedintiAzi.ro</title>
+  <title>Publică Știre – MehedintiAzi.ro</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #1a3a5c; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+    .top-bar {
+      background: #1a3a5c;
+      color: #fff;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .top-bar h1 { font-size: 17px; font-weight: 700; }
+    .top-bar span { font-size: 12px; color: #aac4e0; }
+    .btn-logout { background: none; border: 1px solid #aac4e0; color: #aac4e0; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .btn-logout:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
+
+    /* SETUP SCREEN */
+    .setup-screen {
+      max-width: 480px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 35px 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .setup-screen .logo { font-size: 28px; font-weight: 900; color: #1a3a5c; margin-bottom: 6px; }
+    .setup-screen .logo span { color: #c0392b; }
+    .setup-screen p { color: #666; font-size: 14px; line-height: 1.6; margin: 12px 0 24px; }
+    .setup-screen input {
+      width: 100%; padding: 12px 14px; border: 2px solid #ddd;
+      border-radius: 6px; font-size: 14px; margin-bottom: 12px;
+      font-family: monospace;
+    }
+    .setup-screen input:focus { outline: none; border-color: #1a3a5c; }
+    .setup-screen .hint { font-size: 12px; color: #999; margin-bottom: 18px; text-align: left; }
+    .setup-screen .hint a { color: #1a3a5c; }
+    .btn-primary {
+      background: #1a3a5c; color: #fff; border: none; padding: 13px 30px;
+      border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer;
+      width: 100%; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #0d2240; }
+    .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* MAIN FORM */
+    .main-wrap { max-width: 760px; margin: 0 auto; padding: 20px 15px 60px; }
+
+    .form-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .form-card-title {
+      background: #1a3a5c;
+      color: #fff;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-card-body { padding: 18px; }
+
+    label { display: block; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px; }
+    label .req { color: #c0392b; }
+
+    input[type=text], input[type=date], input[type=time], select, textarea {
+      width: 100%; padding: 11px 13px; border: 2px solid #e0e0e0;
+      border-radius: 6px; font-size: 14px; font-family: Arial, sans-serif;
+      transition: border 0.2s; background: #fff;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #1a3a5c; }
+    textarea { resize: vertical; min-height: 200px; line-height: 1.6; }
+
+    .slug-preview {
+      font-size: 11px; color: #888; margin-top: 5px;
+      font-family: monospace; word-break: break-all;
+    }
+    .slug-preview span { color: #1a3a5c; font-weight: 700; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width: 500px) { .row2 { grid-template-columns: 1fr; } }
+
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+
+    /* Poza upload */
+    .poza-drop {
+      border: 2px dashed #ccc; border-radius: 8px; padding: 24px;
+      text-align: center; cursor: pointer; transition: border 0.2s; background: #fafafa;
+      position: relative;
+    }
+    .poza-drop:hover, .poza-drop.over { border-color: #1a3a5c; background: #f0f4f8; }
+    .poza-drop input[type=file] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .poza-drop .icon { font-size: 36px; display: block; margin-bottom: 8px; }
+    .poza-drop .text { font-size: 14px; color: #666; }
+    .poza-drop .subtext { font-size: 12px; color: #aaa; margin-top: 4px; }
+    .poza-preview { display: none; margin-top: 12px; }
+    .poza-preview img { max-width: 100%; max-height: 200px; border-radius: 6px; border: 1px solid #ddd; }
+    .poza-preview .poza-name { font-size: 12px; color: #555; margin-top: 6px; }
+
+    /* Textarea hint */
+    .textarea-hint { font-size: 11px; color: #999; margin-top: 5px; line-height: 1.5; }
+
+    /* Taguri */
+    .taguri-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tag-chip {
+      background: #e8f0fb; color: #1a3a5c; padding: 4px 10px;
+      border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid #c5d8f0;
+      user-select: none;
+    }
+    .tag-chip.active { background: #1a3a5c; color: #fff; border-color: #1a3a5c; }
+    #taguri-input { margin-bottom: 8px; }
+
+    /* Submit */
+    .submit-area { padding: 0 0 20px; }
+    .btn-publish {
+      background: #c0392b; color: #fff; border: none; padding: 16px;
+      border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;
+      width: 100%; transition: background 0.2s; display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+    }
+    .btn-publish:hover:not(:disabled) { background: #a93226; }
+    .btn-publish:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Progress */
+    .progress-bar {
+      display: none; background: #eee; border-radius: 6px;
+      height: 8px; margin-top: 12px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #1a3a5c, #c0392b);
+      width: 0%; transition: width 0.4s; border-radius: 6px;
+    }
+    .progress-text { font-size: 13px; color: #555; margin-top: 8px; text-align: center; }
+
+    /* Success */
+    .success-box {
+      display: none; background: #e8f8ee; border: 2px solid #27ae60;
+      border-radius: 8px; padding: 24px; text-align: center; margin-top: 16px;
+    }
+    .success-box .icon { font-size: 48px; }
+    .success-box h2 { color: #1e8449; font-size: 20px; margin: 10px 0 6px; }
+    .success-box p { color: #555; font-size: 14px; line-height: 1.6; }
+    .success-box a { color: #c0392b; font-weight: 700; }
+    .btn-new { background: #1a3a5c; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 14px; }
+
+    /* Error */
+    .error-box {
+      display: none; background: #fdf2f1; border: 2px solid #c0392b;
+      border-radius: 8px; padding: 16px; margin-top: 12px;
+      font-size: 14px; color: #c0392b; line-height: 1.5;
+    }
   </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen" class="setup-screen" style="display:none;">
+  <div class="logo">Mehedinti<span>Azi</span>.ro</div>
+  <p>Introdu <strong>Token-ul GitHub</strong> pentru a putea publica stiri.<br>Este necesar o singura data si se salveaza in browser.</p>
+
+  <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+
+  <div class="hint">
+    Cum obtii token-ul:<br>
+    1. Mergi la <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+    2. Note: <em>MehedintiAzi CMS</em><br>
+    3. Expiration: <em>No expiration</em><br>
+    4. Bifeaza: <em>repo</em> (prima optiune)<br>
+    5. Click Generate → copiaza token-ul
+  </div>
+
+  <button class="btn-primary" onclick="saveToken()">Salveaza si continua</button>
+  <div id="setup-error" style="color:#c0392b;font-size:13px;margin-top:10px;display:none;"></div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar" id="top-bar" style="display:none;">
+  <div>
+    <h1>&#128466; MehedintiAzi.ro — Publică Știre</h1>
+    <span id="user-info">Conectat</span>
+  </div>
+  <button class="btn-logout" onclick="logout()">Deconectare</button>
+</div>
+
+<!-- MAIN FORM -->
+<div class="main-wrap" id="main-form" style="display:none;">
+
+  <div class="form-card">
+    <div class="form-card-title">&#128221; Informații articol</div>
+    <div class="form-card-body">
+
+      <div class="field">
+        <label>Titlu știre <span class="req">*</span></label>
+        <input type="text" id="titlu" placeholder="Ex: Primăria Drobeta anunță lucrări pe strada Independenței" oninput="updateSlug()" />
+        <div class="slug-preview">URL articol: mehedintiazi.ro/<span id="slug-preview">...</span></div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Data publicării <span class="req">*</span></label>
+          <input type="date" id="data" />
+        </div>
+        <div class="field">
+          <label>Ora <span class="req">*</span></label>
+          <input type="time" id="ora" value="10:00" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Categorie <span class="req">*</span></label>
+        <select id="categorie">
+          <option value="Actualitate">Actualitate</option>
+          <option value="Ordine Publică">Ordine Publică</option>
+          <option value="Social">Social</option>
+          <option value="Economic">Economic</option>
+          <option value="Sport">Sport</option>
+          <option value="Cultură">Cultură</option>
+          <option value="Educație">Educație</option>
+          <option value="Meteo">Meteo</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">&#128247; Foto principală</div>
+    <div class="form-card-body">
+      <div class="poza-drop" id="poza-drop">
+        <input type="file" id="poza-file" accept="image/*" onchange="handlePoza(this)" />
+        <span class="icon">&#128444;</span>
+        <div class="text">Click sau trage poza aici</div>
+        <div class="subtext">JPG, PNG – recomandat minim 800×500 px</div>
+      </div>
+      <div class="poza-preview" id="poza-preview">
+        <img id="poza-img" src="" alt="" />
+        <div class="poza-name" id="poza-name"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">&#128196; Text articol</div>
+    <div class="form-card-body">
+      <div class="field">
+        <label>Conținut <span class="req">*</span></label>
+        <textarea id="text-articol" placeholder="Scrie textul știrii aici...
+
+Poți folosi:
+**text bold** pentru bold
+## Subtitlu pentru titluri intermediare
+- element pentru liste"></textarea>
+        <div class="textarea-hint">
+          **cuvant** = <strong>bold</strong> &nbsp;|&nbsp;
+          ## Subtitlu = titlu intermediar &nbsp;|&nbsp;
+          - punct = lista
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">&#127991; Taguri SEO</div>
+    <div class="form-card-body">
+      <div class="field">
+        <label>Taguri (click pentru selectare rapidă)</label>
+        <input type="text" id="taguri-input" placeholder="Adaugă tag personalizat și apasă Enter" onkeydown="addCustomTag(event)" />
+        <div class="taguri-row" id="taguri-chips">
+          <span class="tag-chip" onclick="toggleTag(this)">mehedinți</span>
+          <span class="tag-chip" onclick="toggleTag(this)">drobeta turnu severin</span>
+          <span class="tag-chip" onclick="toggleTag(this)">actualitate</span>
+          <span class="tag-chip" onclick="toggleTag(this)">politie</span>
+          <span class="tag-chip" onclick="toggleTag(this)">accident</span>
+          <span class="tag-chip" onclick="toggleTag(this)">primărie</span>
+          <span class="tag-chip" onclick="toggleTag(this)">sport</span>
+          <span class="tag-chip" onclick="toggleTag(this)">cultură</span>
+          <span class="tag-chip" onclick="toggleTag(this)">educație</span>
+          <span class="tag-chip" onclick="toggleTag(this)">sănătate</span>
+          <span class="tag-chip" onclick="toggleTag(this)">2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn-publish" id="btn-publish" onclick="publicaStirea()">
+      &#128640; Publică Știrea pe Site
+    </button>
+    <div class="progress-bar" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-text" id="progress-text"></div>
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <div class="success-box" id="success-box">
+    <div class="icon">&#9989;</div>
+    <h2>Știrea a fost publicată!</h2>
+    <p id="success-msg">Articolul va apărea pe site în aproximativ 1 minut.</p>
+    <p id="success-link" style="margin-top:10px;"></p>
+    <button class="btn-new" onclick="newStire()">+ Publică altă știre</button>
+  </div>
+
+</div>
+
+<script>
+const OWNER = 'tanasiecristinel1975-wq';
+const REPO  = 'mehedintiazi';
+const BRANCH = 'main';
+
+// ===== AUTH =====
+function getToken() { return localStorage.getItem('ma_pat') || ''; }
+function saveToken() {
+  var t = document.getElementById('pat-input').value.trim();
+  if (!t || !t.startsWith('ghp_') && !t.startsWith('github_pat_')) {
+    document.getElementById('setup-error').style.display = 'block';
+    document.getElementById('setup-error').textContent = 'Token invalid. Trebuie sa inceapa cu ghp_ sau github_pat_';
+    return;
+  }
+  localStorage.setItem('ma_pat', t);
+  checkAuth();
+}
+function logout() {
+  localStorage.removeItem('ma_pat');
+  localStorage.removeItem('ma_user');
+  location.reload();
+}
+
+async function checkAuth() {
+  var token = getToken();
+  if (!token) { showSetup(); return; }
+  try {
+    var r = await fetch('https://api.github.com/user', {
+      headers: { 'Authorization': 'token ' + token }
+    });
+    if (!r.ok) { localStorage.removeItem('ma_pat'); showSetup(); return; }
+    var u = await r.json();
+    localStorage.setItem('ma_user', u.login);
+    showForm(u.login);
+  } catch(e) { showSetup(); }
+}
+
+function showSetup() {
+  document.getElementById('setup-screen').style.display = 'block';
+  document.getElementById('top-bar').style.display = 'none';
+  document.getElementById('main-form').style.display = 'none';
+}
+function showForm(user) {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('top-bar').style.display = 'flex';
+  document.getElementById('main-form').style.display = 'block';
+  document.getElementById('user-info').textContent = 'Conectat ca: ' + user;
+  // Seteaza data de azi
+  var azi = new Date();
+  var yyyy = azi.getFullYear();
+  var mm = String(azi.getMonth()+1).padStart(2,'0');
+  var dd = String(azi.getDate()).padStart(2,'0');
+  document.getElementById('data').value = yyyy + '-' + mm + '-' + dd;
+}
+
+// ===== SLUG =====
+function titluLaSlug(titlu) {
+  var r = {'ă':'a','â':'a','î':'i','ș':'s','ț':'t','Ă':'a','Â':'a','Î':'i','Ș':'s','Ț':'t',
+           'ş':'s','ţ':'t','Ş':'s','Ţ':'t','\u201c':'','\u201d':'','\u201e':'','\u00bb':'','\u00ab':''};
+  var s = titlu.toLowerCase();
+  for (var k in r) s = s.split(k).join(r[k]);
+  s = s.replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').trim().slice(0,70);
+  return s;
+}
+function getYear() { return new Date().getFullYear(); }
+function updateSlug() {
+  var titlu = document.getElementById('titlu').value;
+  var slug = titlu ? titluLaSlug(titlu) + '-' + getYear() : '...';
+  document.getElementById('slug-preview').textContent = slug;
+}
+
+// ===== POZA =====
+var pozaFile = null;
+var pozaBase64 = '';
+var pozaNumeFinal = '';
+
+function handlePoza(input) {
+  var file = input.files[0];
+  if (!file) return;
+  pozaFile = file;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    pozaBase64 = e.target.result.split(',')[1];
+    document.getElementById('poza-img').src = e.target.result;
+    var ext = file.name.split('.').pop().toLowerCase();
+    var slug = titluLaSlug(document.getElementById('titlu').value || 'poza');
+    pozaNumeFinal = slug + '-' + getYear() + '.' + ext;
+    document.getElementById('poza-name').textContent = 'Fisier: ' + pozaNumeFinal;
+    document.getElementById('poza-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Drag and drop
+var drop = document.getElementById('poza-drop');
+drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', function() { drop.classList.remove('over'); });
+drop.addEventListener('drop', function(e) {
+  e.preventDefault(); drop.classList.remove('over');
+  var f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) {
+    var dt = new DataTransfer(); dt.items.add(f);
+    document.getElementById('poza-file').files = dt.files;
+    handlePoza(document.getElementById('poza-file'));
+  }
+});
+
+// ===== TAGURI =====
+function toggleTag(el) { el.classList.toggle('active'); }
+function addCustomTag(e) {
+  if (e.key !== 'Enter') return;
+  var val = document.getElementById('taguri-input').value.trim();
+  if (!val) return;
+  var chip = document.createElement('span');
+  chip.className = 'tag-chip active';
+  chip.textContent = val;
+  chip.onclick = function() { chip.classList.toggle('active'); };
+  document.getElementById('taguri-chips').appendChild(chip);
+  document.getElementById('taguri-input').value = '';
+}
+function getTaguri() {
+  return Array.from(document.querySelectorAll('#taguri-chips .tag-chip.active'))
+    .map(function(c) { return c.textContent.trim(); });
+}
+
+// ===== PROGRESS =====
+function setProgress(pct, text) {
+  document.getElementById('progress-bar').style.display = 'block';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = text;
+}
+
+// ===== GITHUB API =====
+async function githubPut(path, content, message, sha) {
+  var body = { message: message, content: content, branch: BRANCH };
+  if (sha) body.sha = sha;
+  var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'token ' + getToken(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  var data = await r.json();
+  if (!r.ok) throw new Error(data.message || 'Eroare GitHub API');
+  return data;
+}
+
+async function githubGetSha(path) {
+  var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH, {
+    headers: { 'Authorization': 'token ' + getToken() }
+  });
+  if (r.status === 404) return null;
+  var d = await r.json();
+  return d.sha || null;
+}
+
+// ===== FORMAT MARKDOWN =====
+function buildMarkdown(titlu, data, ora, categorie, poza, taguri, text) {
+  var tagsYaml = taguri.map(function(t) { return '  - "' + t + '"'; }).join('\n');
+  var dateISO = data + 'T' + ora + ':00';
+  return '---\n' +
+    'title: "' + titlu.replace(/"/g,'\\"') + '"\n' +
+    'date: "' + dateISO + '"\n' +
+    'categorie: "' + categorie + '"\n' +
+    'poza: "/img/' + poza + '"\n' +
+    'taguri:\n' + tagsYaml + '\n' +
+    '---\n\n' + text;
+}
+
+function toBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+// ===== PUBLICA =====
+async function publicaStirea() {
+  var errBox = document.getElementById('error-box');
+  errBox.style.display = 'none';
+
+  var titlu = document.getElementById('titlu').value.trim();
+  var data  = document.getElementById('data').value;
+  var ora   = document.getElementById('ora').value;
+  var cat   = document.getElementById('categorie').value;
+  var text  = document.getElementById('text-articol').value.trim();
+  var taguri = getTaguri();
+
+  // Validari
+  if (!titlu) { showError('Completează titlul știrii!'); return; }
+  if (!data)  { showError('Completează data publicării!'); return; }
+  if (!pozaBase64) { showError('Adaugă o fotografie principală!'); return; }
+  if (text.length < 80) { showError('Textul știrii este prea scurt (minim 80 caractere)!'); return; }
+
+  var slug = titluLaSlug(titlu) + '-' + getYear();
+
+  document.getElementById('btn-publish').disabled = true;
+  document.getElementById('success-box').style.display = 'none';
+
+  try {
+    // 1. Upload poza
+    setProgress(20, 'Se incarca fotografia...');
+    var pozaPath = 'img/' + pozaNumeFinal;
+    var existingSha = await githubGetSha(pozaPath);
+    await githubPut(pozaPath, pozaBase64, 'Poza: ' + pozaNumeFinal, existingSha);
+
+    // 2. Creeaza fisierul markdown in _stiri/
+    setProgress(55, 'Se salveaza articolul...');
+    var mdContent = buildMarkdown(titlu, data, ora, cat, pozaNumeFinal, taguri, text);
+    var mdBase64 = toBase64(mdContent);
+    var mdPath = '_stiri/' + slug + '.md';
+    var mdSha = await githubGetSha(mdPath);
+    await githubPut(mdPath, mdBase64, 'Stire noua: ' + titlu.slice(0,60), mdSha);
+
+    // 3. Gata!
+    setProgress(100, 'Publicat! GitHub genereaza HTML-ul automat...');
+
+    setTimeout(function() {
+      document.getElementById('progress-bar').style.display = 'none';
+      document.getElementById('progress-text').textContent = '';
+      document.getElementById('btn-publish').disabled = false;
+
+      var url = 'https://www.mehedintiazi.ro/' + slug;
+      document.getElementById('success-msg').textContent =
+        'Articolul va apărea live pe site in aproximativ 1 minut (GitHub il genereaza automat).';
+      document.getElementById('success-link').innerHTML =
+        'Link articol: <a href="' + url + '" target="_blank">' + url + '</a>';
+      document.getElementById('success-box').style.display = 'block';
+      document.getElementById('success-box').scrollIntoView({ behavior: 'smooth' });
+    }, 1200);
+
+  } catch(e) {
+    document.getElementById('btn-publish').disabled = false;
+    document.getElementById('progress-bar').style.display = 'none';
+    document.getElementById('progress-text').textContent = '';
+    showError('Eroare: ' + e.message + '\n\nVerifica tokenul GitHub si conexiunea la internet.');
+  }
+}
+
+function showError(msg) {
+  var b = document.getElementById('error-box');
+  b.textContent = msg;
+  b.style.display = 'block';
+  b.scrollIntoView({ behavior: 'smooth' });
+}
+
+function newStire() {
+  document.getElementById('titlu').value = '';
+  document.getElementById('text-articol').value = '';
+  document.getElementById('taguri-input').value = '';
+  document.querySelectorAll('#taguri-chips .tag-chip').forEach(function(c) { c.classList.remove('active'); });
+  document.getElementById('poza-preview').style.display = 'none';
+  document.getElementById('success-box').style.display = 'none';
+  pozaFile = null; pozaBase64 = ''; pozaNumeFinal = '';
+  updateSlug();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// INIT
+checkAuth();
+</script>
 </body>
 </html>
