@@ -113,7 +113,7 @@ def genereaza_articol_html(metadata, body_md, slug):
     ora = date_str[11:16] if len(date_str) > 10 else '10:00'
     categorie = metadata.get('categorie', 'Actualitate')
     poza_rel = get_poza_rel(metadata.get('poza', ''))
-    taguri_lista = metadata.get('taguri', [])
+    taguri_lista = metadata.get('taguri') or []
     if isinstance(taguri_lista, str):
         taguri_lista = [t.strip() for t in taguri_lista.split(',')]
 
