@@ -115,6 +115,40 @@
     .poza-preview img { max-width: 100%; max-height: 200px; border-radius: 6px; border: 1px solid #ddd; }
     .poza-preview .poza-name { font-size: 12px; color: #555; margin-top: 6px; }
 
+    /* Galerie foto */
+    .galerie-drop {
+      border: 2px dashed #ccc; border-radius: 8px; padding: 20px;
+      text-align: center; cursor: pointer; transition: border 0.2s; background: #fafafa;
+      position: relative;
+    }
+    .galerie-drop:hover, .galerie-drop.over { border-color: #1a3a5c; background: #f0f4f8; }
+    .galerie-drop input[type=file] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .galerie-drop .icon { font-size: 30px; display: block; margin-bottom: 6px; }
+    .galerie-drop .text { font-size: 14px; color: #666; }
+    .galerie-drop .subtext { font-size: 12px; color: #aaa; margin-top: 3px; }
+    .galerie-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px; margin-top: 12px;
+    }
+    .galerie-item {
+      position: relative; border-radius: 6px; overflow: hidden;
+      border: 2px solid #ddd; background: #eee;
+    }
+    .galerie-item img { width: 100%; height: 80px; object-fit: cover; display: block; }
+    .galerie-item .del {
+      position: absolute; top: 3px; right: 3px; background: rgba(192,57,43,0.9);
+      color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px;
+      font-size: 14px; cursor: pointer; line-height: 22px; text-align: center; padding: 0;
+    }
+    .galerie-item .nr {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.55); color: #fff; font-size: 10px;
+      text-align: center; padding: 2px;
+    }
+    .galerie-count { font-size: 12px; color: #27ae60; font-weight: 700; margin-top: 8px; }
+
     /* Textarea hint */
     .textarea-hint { font-size: 11px; color: #999; margin-top: 5px; line-height: 1.5; }
 
@@ -253,6 +287,23 @@
       <div class="poza-preview" id="poza-preview">
         <img id="poza-img" src="" alt="" />
         <div class="poza-name" id="poza-name"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">&#128444; Galerie foto suplimentară (opțional)</div>
+    <div class="form-card-body">
+      <div class="field">
+        <label>Poze suplimentare — apar în articol după text</label>
+        <div class="galerie-drop" id="galerie-drop">
+          <input type="file" id="galerie-files" accept="image/*" multiple onchange="handleGalerie(this)" />
+          <span class="icon">&#128247;</span>
+          <div class="text">Click sau trage pozele aici (poți selecta mai multe)</div>
+          <div class="subtext">JPG, PNG – maxim 10 poze</div>
+        </div>
+        <div class="galerie-grid" id="galerie-grid"></div>
+        <div class="galerie-count" id="galerie-count"></div>
       </div>
     </div>
   </div>
@@ -414,6 +465,59 @@ function handlePoza(input) {
   reader.readAsDataURL(file);
 }
 
+// ===== GALERIE FOTO =====
+var galeriePoze = []; // [{base64, name, preview}]
+
+function handleGalerie(input) {
+  var files = Array.from(input.files).slice(0, 10);
+  galeriePoze = [];
+  var grid = document.getElementById('galerie-grid');
+  grid.innerHTML = '';
+  var loaded = 0;
+  files.forEach(function(file, i) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = e.target.result.split(',')[1];
+      var ext = file.name.split('.').pop().toLowerCase();
+      galeriePoze.push({ base64: b64, ext: ext, preview: e.target.result, index: i });
+      loaded++;
+      if (loaded === files.length) renderGalerieGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderGalerieGrid() {
+  var grid = document.getElementById('galerie-grid');
+  var count = document.getElementById('galerie-count');
+  grid.innerHTML = '';
+  galeriePoze.sort(function(a,b){ return a.index-b.index; });
+  galeriePoze.forEach(function(poza, i) {
+    var div = document.createElement('div');
+    div.className = 'galerie-item';
+    div.innerHTML = '<img src="' + poza.preview + '" alt=""/>' +
+      '<button class="del" onclick="stergeGalerie(' + i + ')">×</button>' +
+      '<div class="nr">Foto ' + (i+1) + '</div>';
+    grid.appendChild(div);
+  });
+  count.textContent = galeriePoze.length > 0 ? galeriePoze.length + ' poze selectate' : '';
+}
+
+function stergeGalerie(i) {
+  galeriePoze.splice(i, 1);
+  renderGalerieGrid();
+}
+
+// Drag and drop galerie
+var gDrop = document.getElementById('galerie-drop');
+gDrop.addEventListener('dragover', function(e) { e.preventDefault(); gDrop.classList.add('over'); });
+gDrop.addEventListener('dragleave', function() { gDrop.classList.remove('over'); });
+gDrop.addEventListener('drop', function(e) {
+  e.preventDefault(); gDrop.classList.remove('over');
+  var fakeInput = { files: e.dataTransfer.files };
+  handleGalerie(fakeInput);
+});
+
 // Drag and drop
 var drop = document.getElementById('poza-drop');
 drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('over'); });
@@ -480,16 +584,21 @@ async function githubGetSha(path) {
 }
 
 // ===== FORMAT MARKDOWN =====
-function buildMarkdown(titlu, data, ora, categorie, poza, taguri, text) {
+function buildMarkdown(titlu, data, ora, categorie, poza, taguri, text, galerieList) {
   var tagsYaml = taguri.map(function(t) { return '  - "' + t + '"'; }).join('\n');
   var dateISO = data + 'T' + ora + ':00';
+  var galerie = '';
+  if (galerieList && galerieList.length > 0) {
+    galerie = '\n\n## Galerie foto\n\n' +
+      galerieList.map(function(n) { return '![]( /img/' + n + ')'; }).join('\n\n');
+  }
   return '---\n' +
     'title: "' + titlu.replace(/"/g,'\\"') + '"\n' +
     'date: "' + dateISO + '"\n' +
     'categorie: "' + categorie + '"\n' +
     'poza: "/img/' + poza + '"\n' +
     'taguri:\n' + tagsYaml + '\n' +
-    '---\n\n' + text;
+    '---\n\n' + text + galerie;
 }
 
 function toBase64(str) {
@@ -520,21 +629,38 @@ async function publicaStirea() {
   document.getElementById('success-box').style.display = 'none';
 
   try {
-    // 1. Upload poza
-    setProgress(20, 'Se incarca fotografia...');
+    var totalSteps = 1 + galeriePoze.length + 1;
+    var step = 0;
+
+    // 1. Upload poza principala
+    setProgress(10, 'Se incarca fotografia principala...');
     var pozaPath = 'img/' + pozaNumeFinal;
     var existingSha = await githubGetSha(pozaPath);
     await githubPut(pozaPath, pozaBase64, 'Poza: ' + pozaNumeFinal, existingSha);
+    step++;
 
-    // 2. Creeaza fisierul markdown in _stiri/
-    setProgress(55, 'Se salveaza articolul...');
-    var mdContent = buildMarkdown(titlu, data, ora, cat, pozaNumeFinal, taguri, text);
+    // 2. Upload poze galerie
+    var galerieNumeList = [];
+    for (var gi = 0; gi < galeriePoze.length; gi++) {
+      var gp = galeriePoze[gi];
+      var gName = slug + '-foto-' + (gi+2) + '-' + getYear() + '.' + gp.ext;
+      galerieNumeList.push(gName);
+      setProgress(Math.round(10 + (gi+1) / (galeriePoze.length+1) * 60),
+        'Se incarca poza ' + (gi+1) + ' din ' + galeriePoze.length + '...');
+      var gSha = await githubGetSha('img/' + gName);
+      await githubPut('img/' + gName, gp.base64, 'Poza galerie: ' + gName, gSha);
+      step++;
+    }
+
+    // 3. Creeaza fisierul markdown
+    setProgress(80, 'Se salveaza articolul...');
+    var mdContent = buildMarkdown(titlu, data, ora, cat, pozaNumeFinal, taguri, text, galerieNumeList);
     var mdBase64 = toBase64(mdContent);
     var mdPath = '_stiri/' + slug + '.md';
     var mdSha = await githubGetSha(mdPath);
     await githubPut(mdPath, mdBase64, 'Stire noua: ' + titlu.slice(0,60), mdSha);
 
-    // 3. Gata!
+    // 4. Gata!
     setProgress(100, 'Publicat! GitHub genereaza HTML-ul automat...');
 
     setTimeout(function() {
@@ -573,6 +699,9 @@ function newStire() {
   document.querySelectorAll('#taguri-chips .tag-chip').forEach(function(c) { c.classList.remove('active'); });
   document.getElementById('poza-preview').style.display = 'none';
   document.getElementById('success-box').style.display = 'none';
+  document.getElementById('galerie-grid').innerHTML = '';
+  document.getElementById('galerie-count').textContent = '';
+  galeriePoze = [];
   pozaFile = null; pozaBase64 = ''; pozaNumeFinal = '';
   updateSlug();
   window.scrollTo({ top: 0, behavior: 'smooth' });
