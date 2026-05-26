@@ -4,7 +4,7 @@ date: "2026-05-26T06:11:00"
 categorie: "Actualitate"
 poza: "/img/modernizare-de-aproape-un-milion-de-euro-in-cazanesti-continua-asfalta-2026.jpg"
 taguri:
-
+  - "Căzănești, Mehedinți, asfaltare, drumuri comunale"
 ---
 
 Lucrările de modernizare a infrastructurii rutiere continuă în comuna Căzănești, unde administrația locală derulează un proiect important de investiții finanțat prin Programul Național de Investiții „Anghel Saligny”, cu o valoare de aproximativ un milion de euro. Proiectul vizează îmbunătățirea condițiilor de trafic și creșterea nivelului de confort pentru locuitorii din mai multe sate ale comunei.
