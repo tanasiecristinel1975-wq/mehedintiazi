@@ -1,10 +1,10 @@
 ---
 title: "Au continuat activitățile în cadrul evenimentului național „Săptămâna Școală în Siguranță”"
-date: "2026-05-26T17:23:00"
+date: "2026-05-26T17:43:00"
 categorie: "Actualitate"
 poza: "/img/au-continuat-activitatile-in-cadrul-evenimentului-national-saptamana-s-2026.jpeg"
 taguri:
-  - "dami tag"
+
 ---
 
 Astăzi, 26 mai, polițiștii de la Biroul Siguranță Școlară împreună cu reprezentanții Centrului Județean de Resurse și Asistență Educațională Mehedinți au continuat activitățile în cadrul evenimentului național „Săptămâna Școală în Siguranță”, inițiat la nivelul Poliției Române prin Direcția Siguranța Școlară.
@@ -24,3 +24,7 @@ Prin acest demers, polițiștii Inspectoratului de Poliție Județean Mehedinți
 ![]( /img/au-continuat-activitatile-in-cadrul-evenimentului-national-saptamana-s-2026-foto-3-2026.jpeg)
 
 ![]( /img/au-continuat-activitatile-in-cadrul-evenimentului-national-saptamana-s-2026-foto-4-2026.jpeg)
+
+![]( /img/au-continuat-activitatile-in-cadrul-evenimentului-national-saptamana-s-2026-foto-5-2026.jpeg)
+
+![]( /img/au-continuat-activitatile-in-cadrul-evenimentului-national-saptamana-s-2026-foto-6-2026.jpeg)
