@@ -602,7 +602,9 @@ function buildMarkdown(titlu, data, ora, categorie, poza, taguri, text, galerieL
 }
 
 function toBase64(str) {
-  return btoa(unescape(encodeURIComponent(str)));
+  var bytes = new TextEncoder().encode(str);
+  var binStr = Array.from(bytes, function(b){ return String.fromCodePoint(b); }).join('');
+  return btoa(binStr);
 }
 
 // ===== PUBLICA =====
