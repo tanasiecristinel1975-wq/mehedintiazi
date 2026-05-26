@@ -9,8 +9,8 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    # Evita bucla infinita: sare peste commit-urile proprii
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    # Evita bucla infinita: sare peste commit-urile facute de GitHub Actions
+    if: github.actor != 'github-actions[bot]'
 
     permissions:
       contents: write
@@ -36,7 +36,7 @@ jobs:
       - name: Commit si push articolele generate
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "[skip ci] Articole generate automat din Decap CMS"
+          commit_message: "Articole generate automat din Decap CMS"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
           file_pattern: "*.html index.html"
