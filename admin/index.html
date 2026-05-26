@@ -583,22 +583,160 @@ async function githubGetSha(path) {
   return d.sha || null;
 }
 
-// ===== FORMAT MARKDOWN =====
-function buildMarkdown(titlu, data, ora, categorie, poza, taguri, text, galerieList) {
-  var tagsYaml = taguri.map(function(t) { return '  - "' + t + '"'; }).join('\n');
-  var dateISO = data + 'T' + ora + ':00';
-  var galerie = '';
+// ===== CONSTANTE TEMPLATE =====
+var LUNI = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie',
+            'Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+var CAT_EMOJI = {
+  'Actualitate':'📰','Ordine Publică':'🔔','Social':'👥',
+  'Economic':'💼','Sport':'⚽','Cultură':'🎭','Educație':'🎓','Meteo':'🌦️'
+};
+var CAT_CULORI = {
+  'Actualitate':'#1a3a5c','Ordine Publică':'#c0392b','Social':'#27ae60',
+  'Economic':'#2980b9','Sport':'#f39c12','Cultură':'#8e44ad',
+  'Educație':'#1a73e8','Meteo':'#16a085'
+};
+
+function formatDataRo(dataStr) {
+  var p = dataStr.split('-');
+  return parseInt(p[2]) + ' ' + LUNI[parseInt(p[1])-1] + ' ' + p[0];
+}
+
+function textToHtml(text) {
+  var lines = text.split('\n');
+  var html = '';
+  var para = [];
+  lines.forEach(function(line) {
+    line = line.trim();
+    if (line.startsWith('## ')) {
+      if (para.length) { html += '<p>' + para.join(' ') + '</p>\n'; para = []; }
+      html += '<h2>' + line.slice(3) + '</h2>\n';
+    } else if (line.startsWith('- ')) {
+      if (para.length) { html += '<p>' + para.join(' ') + '</p>\n'; para = []; }
+      html += '<li>' + line.slice(2) + '</li>\n';
+    } else if (line === '') {
+      if (para.length) { html += '<p>' + para.join(' ') + '</p>\n'; para = []; }
+    } else {
+      para.push(line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'));
+    }
+  });
+  if (para.length) html += '<p>' + para.join(' ') + '</p>\n';
+  return html;
+}
+
+function buildArticolHTML(titlu, dataStr, ora, categorie, pozaNume, taguri, textRaw, galerieList, slug) {
+  var emoji = CAT_EMOJI[categorie] || '📰';
+  var dataRo = formatDataRo(dataStr);
+  var url = 'https://www.mehedintiazi.ro/' + slug;
+  var imgUrl = 'https://www.mehedintiazi.ro/img/' + pozaNume;
+  var textHtml = textToHtml(textRaw);
+  var primaP = textHtml.match(/<p>([\s\S]*?)<\/p>/);
+  var subtitlu = primaP ? primaP[1].replace(/<[^>]*>/g,'').slice(0,200) : titlu.slice(0,200);
+  var tagsHtml = taguri.map(function(t){ return '<span class="tag-item">'+t+'</span>'; }).join('\n          ');
+  var galerieHtml = '';
   if (galerieList && galerieList.length > 0) {
-    galerie = '\n\n## Galerie foto\n\n' +
-      galerieList.map(function(n) { return '![]( /img/' + n + ')'; }).join('\n\n');
+    galerieHtml = '<h2>Galerie foto</h2>\n';
+    galerieList.forEach(function(n){
+      galerieHtml += '<div class="article-img-inline"><img src="img/'+n+'" alt="'+titlu+'" /></div>\n';
+    });
   }
-  return '---\n' +
-    'title: "' + titlu.replace(/"/g,'\\"') + '"\n' +
-    'date: "' + dateISO + '"\n' +
-    'categorie: "' + categorie + '"\n' +
-    'poza: "/img/' + poza + '"\n' +
-    'taguri:\n' + tagsYaml + '\n' +
-    '---\n\n' + text + galerie;
+  var dateISO = dataStr + 'T' + ora + ':00+03:00';
+
+  return '<!DOCTYPE html>\n<html lang="ro">\n<head>\n' +
+'<!-- Google tag (gtag.js) -->\n'+
+'<script async src="https://www.googletagmanager.com/gtag/js?id=G-67X58CLV15"></script>\n'+
+'<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag(\'js\', new Date());\n  gtag(\'config\', \'G-67X58CLV15\');\n</script>\n'+
+'  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'+
+'  <title>'+titlu+' - MehedintiAzi.ro</title>\n'+
+'  <meta name="description" content="'+subtitlu.slice(0,160)+'" />\n'+
+'  <meta name="author" content="Redactia MehedintiAzi.ro" />\n'+
+'  <link rel="canonical" href="'+url+'" />\n'+
+'  <meta property="og:type" content="article" />\n'+
+'  <meta property="og:title" content="'+titlu+'" />\n'+
+'  <meta property="og:description" content="'+subtitlu.slice(0,160)+'" />\n'+
+'  <meta property="og:url" content="'+url+'" />\n'+
+'  <meta property="og:image" content="'+imgUrl+'" />\n'+
+'  <meta property="article:published_time" content="'+dateISO+'" />\n'+
+'  <script type="application/ld+json">\n  {\n    "@context":"https://schema.org","@type":"NewsArticle",\n    "headline":"'+titlu.replace(/"/g,'\\"')+'","datePublished":"'+dateISO+'",\n    "image":"'+imgUrl+'",\n    "author":{"@type":"Organization","name":"Redactia MehedintiAzi.ro"},\n    "publisher":{"@type":"Organization","name":"MehedintiAzi.ro"}\n  }\n  <\/script>\n'+
+'  <link rel="icon" type="image/x-icon" href="/favicon.ico" />\n'+
+'  <link rel="stylesheet" href="css/style.css" />\n'+
+'  <style>\n'+
+'    .article-page{padding:25px 0;} .article-layout{display:grid;grid-template-columns:1fr 300px;gap:25px;}\n'+
+'    .breadcrumb{font-size:12px;color:#999;margin-bottom:15px;} .breadcrumb a{color:#1a3a5c;} .breadcrumb span{margin:0 6px;}\n'+
+'    .article-main{background:#fff;padding:25px;border:1px solid #ddd;}\n'+
+'    .article-category{display:inline-block;background:#1a3a5c;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}\n'+
+'    .article-title{font-size:28px;font-family:Georgia,serif;line-height:1.3;color:#111;margin-bottom:12px;}\n'+
+'    .article-subtitle{font-size:17px;color:#555;line-height:1.5;margin-bottom:15px;font-style:italic;border-left:4px solid #1a3a5c;padding-left:12px;}\n'+
+'    .article-meta{display:flex;align-items:center;gap:20px;padding:10px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;margin-bottom:20px;font-size:13px;color:#888;flex-wrap:wrap;}\n'+
+'    .article-meta .autor{color:#1a3a5c;font-weight:700;}\n'+
+'    .share-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}\n'+
+'    .share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;font-weight:700;color:#fff;border:none;cursor:pointer;border-radius:3px;text-decoration:none;}\n'+
+'    .share-fb{background:#1877f2;} .share-wa{background:#25d366;} .share-copy{background:#555;}\n'+
+'    .share-btn:hover{opacity:0.9;color:#fff;}\n'+
+'    .article-img-main{width:100%;margin-bottom:20px;} .article-img-main img{width:100%;max-height:500px;object-fit:cover;}\n'+
+'    .article-img-inline{width:100%;margin:20px 0;} .article-img-inline img{width:100%;max-height:450px;object-fit:cover;}\n'+
+'    .img-caption{font-size:12px;color:#999;text-align:center;margin-top:6px;font-style:italic;}\n'+
+'    .article-content{font-size:16px;line-height:1.8;color:#222;}\n'+
+'    .article-content p{margin-bottom:16px;} .article-content h2{font-size:22px;font-family:Georgia,serif;color:#1a3a5c;margin:28px 0 12px;padding-bottom:6px;border-bottom:2px solid #eee;}\n'+
+'    .article-content strong{color:#111;} .article-content li{margin-bottom:6px;margin-left:20px;}\n'+
+'    .article-content blockquote{border-left:4px solid #1a3a5c;padding:12px 20px;margin:20px 0;background:#f0f4f8;font-style:italic;font-size:17px;color:#444;}\n'+
+'    .article-tags{margin-top:20px;padding-top:15px;border-top:1px solid #eee;}\n'+
+'    .article-tags span{font-size:13px;font-weight:700;color:#555;margin-right:8px;}\n'+
+'    .tag-item{display:inline-block;background:#f0f4f8;color:#1a3a5c;font-size:12px;padding:3px 9px;margin:3px 2px;border-radius:2px;border:1px solid #dde;}\n'+
+'    .share-bottom{background:#f9f9f9;padding:15px;margin-top:20px;border:1px solid #eee;text-align:center;}\n'+
+'    .share-bottom p{font-size:14px;font-weight:700;color:#333;margin-bottom:10px;}\n'+
+'    .sidebar{display:flex;flex-direction:column;gap:20px;} .sidebar-box{background:#fff;border:1px solid #ddd;padding:15px;}\n'+
+'    .sidebar-box h3{font-size:14px;text-transform:uppercase;font-weight:700;color:#1a3a5c;border-bottom:2px solid #1a3a5c;padding-bottom:8px;margin-bottom:12px;}\n'+
+'    .sidebar-stire{display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;}\n'+
+'    .sidebar-stire:last-child{border-bottom:none;margin-bottom:0;} .sidebar-stire img{width:70px;height:55px;object-fit:cover;flex-shrink:0;}\n'+
+'    .sidebar-stire a{font-size:13px;color:#222;text-decoration:none;font-weight:600;line-height:1.4;}\n'+
+'    @media(max-width:768px){.article-layout{grid-template-columns:1fr;}.article-title{font-size:22px;}}\n'+
+'  </style>\n'+
+'  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer><\/script>\n'+
+'  <script>\n    window.OneSignalDeferred=window.OneSignalDeferred||[];\n    OneSignalDeferred.push(async function(OneSignal){await OneSignal.init({appId:"2e6f20be-5714-4e65-abbe-dd218bd3b3b2"});});\n  <\/script>\n'+
+'  <link rel="alternate" type="application/rss+xml" title="MehedintiAzi.ro RSS" href="/feed.xml" />\n'+
+'</head>\n<body>\n\n'+
+'<div id="header-placeholder"></div>\n'+
+'<script>\n  fetch(\'index.html\').then(r=>r.text()).then(html=>{\n    var parser=new DOMParser();var doc=parser.parseFromString(html,\'text/html\');\n    var header=doc.querySelector(\'header\');\n    if(header) document.getElementById(\'header-placeholder\').replaceWith(header.cloneNode(true));\n  });\n<\/script>\n\n'+
+'<main class="container article-page">\n\n'+
+'  <div class="breadcrumb"><a href="index.html">Acasă</a><span>›</span><a href="#">'+categorie+'</a><span>›</span>'+titlu.slice(0,60)+'</div>\n\n'+
+'  <div class="article-layout">\n    <article class="article-main">\n\n'+
+'      <span class="article-category">'+emoji+' '+categorie+'</span>\n'+
+'      <h1 class="article-title">'+titlu+'</h1>\n'+
+'      <p class="article-subtitle">'+subtitlu+'</p>\n'+
+'      <div class="article-meta">\n        <span>📅 '+dataRo+'</span>\n        <span>🕐 '+ora+'</span>\n        <span class="autor">✏️ Redacția MehedintiAzi.ro</span>\n      </div>\n'+
+'      <div class="share-bar">\n'+
+'        <a class="share-btn share-fb" href="https://www.facebook.com/sharer/sharer.php?u='+url+'" target="_blank">📌 Facebook</a>\n'+
+'        <a class="share-btn share-wa" href="https://wa.me/?text='+url+'" target="_blank">📲 WhatsApp</a>\n'+
+'        <button class="share-btn share-copy" onclick="navigator.clipboard.writeText(window.location.href)">📋 Copiază link</button>\n'+
+'      </div>\n'+
+'      <div class="article-img-main"><img src="img/'+pozaNume+'" alt="'+titlu+'" /><p class="img-caption">Foto: MehedintiAzi.ro</p></div>\n'+
+'      <div class="article-content">\n'+textHtml+'\n'+galerieHtml+'\n'+
+'        <div class="article-tags"><span>Etichete:</span>\n          '+tagsHtml+'\n        </div>\n'+
+'      </div>\n'+
+'      <div class="share-bottom"><p>📎 Distribuie această știre</p>\n'+
+'        <div class="share-bar" style="justify-content:center;">\n'+
+'          <a class="share-btn share-fb" href="https://www.facebook.com/sharer/sharer.php?u='+url+'" target="_blank">📌 Facebook</a>\n'+
+'          <a class="share-btn share-wa" href="https://wa.me/?text='+url+'" target="_blank">📲 WhatsApp</a>\n'+
+'        </div>\n      </div>\n'+
+'    </article>\n'+
+'    <aside class="sidebar"><div class="sidebar-box"><h3>Știri recente</h3><div id="sidebar-stiri-recente">Se incarca...</div></div></aside>\n'+
+'  </div>\n</main>\n\n'+
+'<div id="footer-placeholder"></div>\n'+
+'<script>\n  fetch(\'index.html\').then(r=>r.text()).then(html=>{\n    var parser=new DOMParser();var doc=parser.parseFromString(html,\'text/html\');\n    var footer=doc.querySelector(\'footer\');\n    if(footer) document.getElementById(\'footer-placeholder\').replaceWith(footer.cloneNode(true));\n    var cards=doc.querySelectorAll(\'.article-card\');var sideDiv=document.getElementById(\'sidebar-stiri-recente\');\n    if(sideDiv){var h=\'\';var c=0;cards.forEach(function(card){if(c>=4)return;var img=card.querySelector(\'img\');var link=card.querySelector(\'.card-title a\');if(img&&link){h+=\'<div class="sidebar-stire"><img src="\'+img.getAttribute(\'src\')+\'" alt=""><a href="\'+link.getAttribute(\'href\')+\'">\'+link.textContent+\'</a></div>\';c++;}});sideDiv.innerHTML=h||\'<p>Nicio știre.</p>\';}\n  });\n<\/script>\n</body>\n</html>';
+}
+
+function buildCardHtml(titlu, dataRo, categorie, pozaNume, slug, excerpt) {
+  var culoare = CAT_CULORI[categorie] || '#1a3a5c';
+  var ex = excerpt.slice(0,150).replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return '\n          <!-- ARTICOL - ' + slug.toUpperCase().slice(0,50) + ' -->\n' +
+    '          <div class="article-card" style="border-top:3px solid '+culoare+';">\n' +
+    '            <div class="card-img"><img src="img/'+pozaNume+'" alt="'+titlu.replace(/"/g,'&quot;')+'" style="width:100%;height:100%;object-fit:cover;" /></div>\n' +
+    '            <div class="card-body">\n' +
+    '              <span class="card-category" style="background:'+culoare+';">'+categorie+'</span>\n' +
+    '              <h3 class="card-title"><a href="'+slug+'.html">'+titlu+'</a></h3>\n' +
+    '              <p class="card-excerpt">'+ex+'...</p>\n' +
+    '              <div class="card-meta"><span>&#128336; '+dataRo+'</span><a href="'+slug+'.html" class="card-read">Citeste &rsaquo;</a></div>\n' +
+    '            </div>\n          </div>\n';
 }
 
 function toBase64(str) {
@@ -631,15 +769,11 @@ async function publicaStirea() {
   document.getElementById('success-box').style.display = 'none';
 
   try {
-    var totalSteps = 1 + galeriePoze.length + 1;
-    var step = 0;
-
     // 1. Upload poza principala
     setProgress(10, 'Se incarca fotografia principala...');
     var pozaPath = 'img/' + pozaNumeFinal;
     var existingSha = await githubGetSha(pozaPath);
     await githubPut(pozaPath, pozaBase64, 'Poza: ' + pozaNumeFinal, existingSha);
-    step++;
 
     // 2. Upload poze galerie
     var galerieNumeList = [];
@@ -647,23 +781,44 @@ async function publicaStirea() {
       var gp = galeriePoze[gi];
       var gName = slug + '-foto-' + (gi+2) + '-' + getYear() + '.' + gp.ext;
       galerieNumeList.push(gName);
-      setProgress(Math.round(10 + (gi+1) / (galeriePoze.length+1) * 60),
+      setProgress(Math.round(10 + (gi+1) / (galeriePoze.length+1) * 50),
         'Se incarca poza ' + (gi+1) + ' din ' + galeriePoze.length + '...');
       var gSha = await githubGetSha('img/' + gName);
       await githubPut('img/' + gName, gp.base64, 'Poza galerie: ' + gName, gSha);
-      step++;
     }
 
-    // 3. Creeaza fisierul markdown
-    setProgress(80, 'Se salveaza articolul...');
-    var mdContent = buildMarkdown(titlu, data, ora, cat, pozaNumeFinal, taguri, text, galerieNumeList);
-    var mdBase64 = toBase64(mdContent);
-    var mdPath = '_stiri/' + slug + '.md';
-    var mdSha = await githubGetSha(mdPath);
-    await githubPut(mdPath, mdBase64, 'Stire noua: ' + titlu.slice(0,60), mdSha);
+    // 3. Genereaza si uploadeaza HTML-ul articolului direct
+    setProgress(70, 'Se genereaza articolul HTML...');
+    var articolHtml = buildArticolHTML(titlu, data, ora, cat, pozaNumeFinal, taguri, text, galerieNumeList, slug);
+    var htmlPath = slug + '.html';
+    var htmlSha = await githubGetSha(htmlPath);
+    await githubPut(htmlPath, toBase64(articolHtml), 'Stire: ' + titlu.slice(0,60), htmlSha);
 
-    // 4. Gata!
-    setProgress(100, 'Publicat! GitHub genereaza HTML-ul automat...');
+    // 4. Actualizeaza index.html cu cardul articolului
+    setProgress(85, 'Se actualizeaza pagina principala...');
+    var indexR = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/index.html?ref=' + BRANCH, {
+      headers: { 'Authorization': 'token ' + getToken() }
+    });
+    var indexData = await indexR.json();
+    var indexSha = indexData.sha;
+    var indexContent = decodeURIComponent(escape(atob(indexData.content.replace(/\n/g,''))));
+
+    var marker = '<div class="articles-grid mb-20">';
+    if (indexContent.includes(slug + '.html')) {
+      // cardul exista deja, nu duplica
+    } else if (indexContent.includes(marker)) {
+      var dataRo = formatDataRo(data);
+      var textHtmlPreview = textToHtml(text);
+      var primaP = textHtmlPreview.match(/<p>([\s\S]*?)<\/p>/);
+      var excerpt = primaP ? primaP[1].replace(/<[^>]*>/g,'').slice(0,150) : titlu.slice(0,150);
+      var card = buildCardHtml(titlu, dataRo, cat, pozaNumeFinal, slug, excerpt);
+      var insertPos = indexContent.indexOf(marker) + marker.length;
+      indexContent = indexContent.slice(0, insertPos) + card + indexContent.slice(insertPos);
+      await githubPut('index.html', toBase64(indexContent), 'Card homepage: ' + titlu.slice(0,50), indexSha);
+    }
+
+    // 5. Gata!
+    setProgress(100, 'Publicat cu succes!');
 
     setTimeout(function() {
       document.getElementById('progress-bar').style.display = 'none';
@@ -672,7 +827,7 @@ async function publicaStirea() {
 
       var url = 'https://www.mehedintiazi.ro/' + slug;
       document.getElementById('success-msg').textContent =
-        'Articolul va apărea live pe site in aproximativ 1 minut (GitHub il genereaza automat).';
+        'Articolul va apărea live în aproximativ 2 minute (Cloudflare il deployeaza).';
       document.getElementById('success-link').innerHTML =
         'Link articol: <a href="' + url + '" target="_blank">' + url + '</a>';
       document.getElementById('success-box').style.display = 'block';
