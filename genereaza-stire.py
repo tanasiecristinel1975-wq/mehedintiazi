@@ -9,6 +9,21 @@ import re
 import sys
 from datetime import datetime
 
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
+
+def get_image_dimensions(poza_path):
+    if HAS_PIL and os.path.exists(poza_path):
+        try:
+            with Image.open(poza_path) as img:
+                return img.width, img.height
+        except Exception:
+            pass
+    return 1200, 630
+
 SITE_URL = "https://www.mehedintiazi.ro"
 SITE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = os.path.join(SITE_DIR, "STIRE-NOUA.txt")
@@ -89,7 +104,7 @@ def proceseaza_bold(text):
     """Converteste *cuvant* in <strong>cuvant</strong>."""
     return re.sub(r'\*(.+?)\*', r'<strong>\1</strong>', text)
 
-def genereaza_html(titlu, data, ora, categorie, poza, text_html, taguri_lista, slug):
+def genereaza_html(titlu, data, ora, categorie, poza, text_html, taguri_lista, slug, img_w=1200, img_h=630):
     emoji = CATEGORII_EMOJI.get(categorie, "📰")
     taguri_html = '\n          '.join([f'<span class="tag-item">{t.strip()}</span>' for t in taguri_lista])
     url_articol = f"{SITE_URL}/{slug}"
@@ -125,6 +140,12 @@ def genereaza_html(titlu, data, ora, categorie, poza, text_html, taguri_lista, s
   <meta property="og:url" content="{url_articol}" />
   <meta property="og:site_name" content="MehedintiAzi.ro" />
   <meta property="og:image" content="{img_url}" />
+  <meta property="og:image:width" content="{img_w}" />
+  <meta property="og:image:height" content="{img_h}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:locale" content="ro_RO" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="{img_url}" />
   <meta property="article:published_time" content="2026-{datetime.now().strftime('%m-%d')}T{ora}:00+03:00" />
 
   <script type="application/ld+json">
@@ -344,7 +365,10 @@ def main():
     text_html = proceseaza_text(text_raw)
     taguri_lista = [t.strip() for t in taguri_str.split(',') if t.strip()]
 
-    html, slug = genereaza_html(titlu, data, ora, categorie, poza, text_html, taguri_lista, slug)
+    poza_path = os.path.join(SITE_DIR, "img", poza)
+    img_w, img_h = get_image_dimensions(poza_path)
+
+    html, slug = genereaza_html(titlu, data, ora, categorie, poza, text_html, taguri_lista, slug, img_w, img_h)
 
     fisier_output = os.path.join(SITE_DIR, f"{slug}.html")
     with open(fisier_output, 'w', encoding='utf-8') as f:

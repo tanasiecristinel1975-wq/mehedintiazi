@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Publică Știre – MehedintiAzi.ro</title>
+  <title>Admin – MehedintiAzi.ro</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, sans-serif; background: #f0f2f5; min-height: 100vh; }
@@ -54,6 +54,23 @@
     .btn-primary:hover { background: #0d2240; }
     .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
 
+    /* TABS */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      flex: 1; padding: 14px; border: none; background: #fff;
+      font-size: 14px; font-weight: 700; cursor: pointer; color: #666;
+      border-bottom: 3px solid transparent; transition: all 0.2s;
+    }
+    .tab-btn:hover { background: #f5f8fb; color: #1a3a5c; }
+    .tab-btn.active { color: #1a3a5c; border-bottom-color: #1a3a5c; background: #f0f4f8; }
+
     /* MAIN FORM */
     .main-wrap { max-width: 760px; margin: 0 auto; padding: 20px 15px 60px; }
 
@@ -98,7 +115,6 @@
     .field { margin-bottom: 16px; }
     .field:last-child { margin-bottom: 0; }
 
-    /* Poza upload */
     .poza-drop {
       border: 2px dashed #ccc; border-radius: 8px; padding: 24px;
       text-align: center; cursor: pointer; transition: border 0.2s; background: #fafafa;
@@ -115,7 +131,6 @@
     .poza-preview img { max-width: 100%; max-height: 200px; border-radius: 6px; border: 1px solid #ddd; }
     .poza-preview .poza-name { font-size: 12px; color: #555; margin-top: 6px; }
 
-    /* Galerie foto */
     .galerie-drop {
       border: 2px dashed #ccc; border-radius: 8px; padding: 20px;
       text-align: center; cursor: pointer; transition: border 0.2s; background: #fafafa;
@@ -149,10 +164,8 @@
     }
     .galerie-count { font-size: 12px; color: #27ae60; font-weight: 700; margin-top: 8px; }
 
-    /* Textarea hint */
     .textarea-hint { font-size: 11px; color: #999; margin-top: 5px; line-height: 1.5; }
 
-    /* Taguri */
     .taguri-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .tag-chip {
       background: #e8f0fb; color: #1a3a5c; padding: 4px 10px;
@@ -162,7 +175,6 @@
     .tag-chip.active { background: #1a3a5c; color: #fff; border-color: #1a3a5c; }
     #taguri-input { margin-bottom: 8px; }
 
-    /* Submit */
     .submit-area { padding: 0 0 20px; }
     .btn-publish {
       background: #c0392b; color: #fff; border: none; padding: 16px;
@@ -173,7 +185,6 @@
     .btn-publish:hover:not(:disabled) { background: #a93226; }
     .btn-publish:disabled { background: #ccc; cursor: not-allowed; }
 
-    /* Progress */
     .progress-bar {
       display: none; background: #eee; border-radius: 6px;
       height: 8px; margin-top: 12px; overflow: hidden;
@@ -184,7 +195,6 @@
     }
     .progress-text { font-size: 13px; color: #555; margin-top: 8px; text-align: center; }
 
-    /* Success */
     .success-box {
       display: none; background: #e8f8ee; border: 2px solid #27ae60;
       border-radius: 8px; padding: 24px; text-align: center; margin-top: 16px;
@@ -195,11 +205,57 @@
     .success-box a { color: #c0392b; font-weight: 700; }
     .btn-new { background: #1a3a5c; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 14px; }
 
-    /* Error */
     .error-box {
       display: none; background: #fdf2f1; border: 2px solid #c0392b;
       border-radius: 8px; padding: 16px; margin-top: 12px;
-      font-size: 14px; color: #c0392b; line-height: 1.5;
+      font-size: 14px; color: #c0392b; line-height: 1.5; white-space: pre-wrap;
+    }
+
+    /* EDIT NOTICE */
+    .edit-notice {
+      background: #fff3cd; border: 2px solid #f9a825; border-radius: 8px;
+      padding: 14px 18px; margin-bottom: 16px; font-size: 14px; color: #7d5a00;
+      display: none;
+    }
+    .edit-notice strong { color: #5a3e00; }
+    .btn-cancel-edit {
+      margin-left: 10px; background: #c0392b; color: #fff; border: none;
+      padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 700;
+    }
+
+    /* ARTICOLE GESTIONATE */
+    .articles-mgmt { }
+    .article-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+    }
+    .article-row:hover { background: #f9f9f9; }
+    .article-row:last-child { border-bottom: none; }
+    .article-row-img { width: 70px; height: 55px; flex-shrink: 0; overflow: hidden; border-radius: 4px; background: #eee; }
+    .article-row-img img { width: 100%; height: 100%; object-fit: cover; }
+    .article-row-info { flex: 1; min-width: 0; }
+    .article-row-title { font-size: 13px; font-weight: 700; color: #222; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .article-row-meta { font-size: 11px; color: #888; }
+    .article-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-edit {
+      background: #1a3a5c; color: #fff; border: none; padding: 7px 12px;
+      border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-edit:hover { background: #0d2240; }
+    .btn-delete {
+      background: #c0392b; color: #fff; border: none; padding: 7px 12px;
+      border-radius: 5px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-delete:hover { background: #a93226; }
+    .articles-loading { text-align: center; padding: 30px; color: #888; font-size: 14px; }
+    .btn-refresh { background: #27ae60; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 14px; }
+    .btn-refresh:hover { background: #1e8449; }
+
+    @media(max-width: 500px) {
+      .article-row { flex-wrap: wrap; }
+      .article-row-actions { width: 100%; }
+      .btn-edit, .btn-delete { flex: 1; text-align: center; }
     }
   </style>
 </head>
@@ -209,9 +265,7 @@
 <div id="setup-screen" class="setup-screen" style="display:none;">
   <div class="logo">Mehedinti<span>Azi</span>.ro</div>
   <p>Introdu <strong>Token-ul GitHub</strong> pentru a putea publica stiri.<br>Este necesar o singura data si se salveaza in browser.</p>
-
   <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
-
   <div class="hint">
     Cum obtii token-ul:<br>
     1. Mergi la <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
@@ -220,7 +274,6 @@
     4. Bifeaza: <em>repo</em> (prima optiune)<br>
     5. Click Generate → copiaza token-ul
   </div>
-
   <button class="btn-primary" onclick="saveToken()">Salveaza si continua</button>
   <div id="setup-error" style="color:#c0392b;font-size:13px;margin-top:10px;display:none;"></div>
 </div>
@@ -228,147 +281,175 @@
 <!-- TOP BAR -->
 <div class="top-bar" id="top-bar" style="display:none;">
   <div>
-    <h1>&#128466; MehedintiAzi.ro — Publică Știre</h1>
+    <h1>&#128466; MehedintiAzi.ro — Admin</h1>
     <span id="user-info">Conectat</span>
   </div>
   <button class="btn-logout" onclick="logout()">Deconectare</button>
 </div>
 
-<!-- MAIN FORM -->
+<!-- MAIN WRAP -->
 <div class="main-wrap" id="main-form" style="display:none;">
 
-  <div class="form-card">
-    <div class="form-card-title">&#128221; Informații articol</div>
-    <div class="form-card-body">
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-btn-publica" onclick="switchTab('publica')">&#128221; Publică Știre</button>
+    <button class="tab-btn" id="tab-btn-gestionare" onclick="switchTab('gestionare')">&#128203; Articole Publicate</button>
+  </div>
 
-      <div class="field">
-        <label>Titlu știre <span class="req">*</span></label>
-        <input type="text" id="titlu" placeholder="Ex: Primăria Drobeta anunță lucrări pe strada Independenței" oninput="updateSlug()" />
-        <div class="slug-preview">URL articol: mehedintiazi.ro/<span id="slug-preview">...</span></div>
-      </div>
+  <!-- =================== TAB PUBLICA =================== -->
+  <div id="tab-publica">
 
-      <div class="row2">
+    <!-- EDIT NOTICE -->
+    <div class="edit-notice" id="edit-notice">
+      &#9998; <strong>Mod editare:</strong> <span id="edit-notice-text"></span>
+      <button class="btn-cancel-edit" onclick="cancelEdit()">✕ Anulează editarea</button>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">&#128221; Informații articol</div>
+      <div class="form-card-body">
         <div class="field">
-          <label>Data publicării <span class="req">*</span></label>
-          <input type="date" id="data" />
+          <label>Titlu știre <span class="req">*</span></label>
+          <input type="text" id="titlu" placeholder="Ex: Primăria Drobeta anunță lucrări pe strada Independenței" oninput="updateSlug()" />
+          <div class="slug-preview">URL articol: mehedintiazi.ro/<span id="slug-preview">...</span></div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Data publicării <span class="req">*</span></label>
+            <input type="date" id="data" />
+          </div>
+          <div class="field">
+            <label>Ora <span class="req">*</span></label>
+            <input type="time" id="ora" value="10:00" />
+          </div>
         </div>
         <div class="field">
-          <label>Ora <span class="req">*</span></label>
-          <input type="time" id="ora" value="10:00" />
+          <label>Categorie <span class="req">*</span></label>
+          <select id="categorie">
+            <option value="Actualitate">Actualitate</option>
+            <option value="Ordine Publică">Ordine Publică</option>
+            <option value="Social">Social</option>
+            <option value="Economic">Economic</option>
+            <option value="Sport">Sport</option>
+            <option value="Cultură">Cultură</option>
+            <option value="Educație">Educație</option>
+            <option value="Meteo">Meteo</option>
+          </select>
         </div>
       </div>
-
-      <div class="field">
-        <label>Categorie <span class="req">*</span></label>
-        <select id="categorie">
-          <option value="Actualitate">Actualitate</option>
-          <option value="Ordine Publică">Ordine Publică</option>
-          <option value="Social">Social</option>
-          <option value="Economic">Economic</option>
-          <option value="Sport">Sport</option>
-          <option value="Cultură">Cultură</option>
-          <option value="Educație">Educație</option>
-          <option value="Meteo">Meteo</option>
-        </select>
-      </div>
-
     </div>
-  </div>
 
-  <div class="form-card">
-    <div class="form-card-title">&#128247; Foto principală</div>
-    <div class="form-card-body">
-      <div class="poza-drop" id="poza-drop">
-        <input type="file" id="poza-file" accept="image/*" onchange="handlePoza(this)" />
-        <span class="icon">&#128444;</span>
-        <div class="text">Click sau trage poza aici</div>
-        <div class="subtext">JPG, PNG – recomandat minim 800×500 px</div>
-      </div>
-      <div class="poza-preview" id="poza-preview">
-        <img id="poza-img" src="" alt="" />
-        <div class="poza-name" id="poza-name"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-card">
-    <div class="form-card-title">&#128444; Galerie foto suplimentară (opțional)</div>
-    <div class="form-card-body">
-      <div class="field">
-        <label>Poze suplimentare — apar în articol după text</label>
-        <div class="galerie-drop" id="galerie-drop">
-          <input type="file" id="galerie-files" accept="image/*" multiple onchange="handleGalerie(this)" />
-          <span class="icon">&#128247;</span>
-          <div class="text">Click sau trage pozele aici (poți selecta mai multe)</div>
-          <div class="subtext">JPG, PNG – maxim 10 poze</div>
+    <div class="form-card">
+      <div class="form-card-title">&#128247; Foto principală</div>
+      <div class="form-card-body">
+        <div class="poza-drop" id="poza-drop">
+          <input type="file" id="poza-file" accept="image/*" onchange="handlePoza(this)" />
+          <span class="icon">&#128444;</span>
+          <div class="text">Click sau trage poza aici</div>
+          <div class="subtext">JPG, PNG – recomandat minim 800×500 px</div>
         </div>
-        <div class="galerie-grid" id="galerie-grid"></div>
-        <div class="galerie-count" id="galerie-count"></div>
+        <div class="poza-preview" id="poza-preview">
+          <img id="poza-img" src="" alt="" />
+          <div class="poza-name" id="poza-name"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="form-card">
-    <div class="form-card-title">&#128196; Text articol</div>
-    <div class="form-card-body">
-      <div class="field">
-        <label>Conținut <span class="req">*</span></label>
-        <textarea id="text-articol" placeholder="Scrie textul știrii aici...
+    <div class="form-card">
+      <div class="form-card-title">&#128444; Galerie foto suplimentară (opțional)</div>
+      <div class="form-card-body">
+        <div class="field">
+          <label>Poze suplimentare — apar în articol după text</label>
+          <div class="galerie-drop" id="galerie-drop">
+            <input type="file" id="galerie-files" accept="image/*" multiple onchange="handleGalerie(this)" />
+            <span class="icon">&#128247;</span>
+            <div class="text">Click sau trage pozele aici (poți selecta mai multe)</div>
+            <div class="subtext">JPG, PNG – maxim 10 poze</div>
+          </div>
+          <div class="galerie-grid" id="galerie-grid"></div>
+          <div class="galerie-count" id="galerie-count"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">&#128196; Text articol</div>
+      <div class="form-card-body">
+        <div class="field">
+          <label>Conținut <span class="req">*</span></label>
+          <textarea id="text-articol" placeholder="Scrie textul știrii aici...
 
 Poți folosi:
 **text bold** pentru bold
 ## Subtitlu pentru titluri intermediare
 - element pentru liste"></textarea>
-        <div class="textarea-hint">
-          **cuvant** = <strong>bold</strong> &nbsp;|&nbsp;
-          ## Subtitlu = titlu intermediar &nbsp;|&nbsp;
-          - punct = lista
+          <div class="textarea-hint">
+            **cuvant** = <strong>bold</strong> &nbsp;|&nbsp;
+            ## Subtitlu = titlu intermediar &nbsp;|&nbsp;
+            - punct = lista
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">&#127991; Taguri SEO</div>
+      <div class="form-card-body">
+        <div class="field">
+          <label>Taguri (click pentru selectare rapidă)</label>
+          <input type="text" id="taguri-input" placeholder="Adaugă tag personalizat și apasă Enter" onkeydown="addCustomTag(event)" />
+          <div class="taguri-row" id="taguri-chips">
+            <span class="tag-chip" onclick="toggleTag(this)">mehedinți</span>
+            <span class="tag-chip" onclick="toggleTag(this)">drobeta turnu severin</span>
+            <span class="tag-chip" onclick="toggleTag(this)">actualitate</span>
+            <span class="tag-chip" onclick="toggleTag(this)">politie</span>
+            <span class="tag-chip" onclick="toggleTag(this)">accident</span>
+            <span class="tag-chip" onclick="toggleTag(this)">primărie</span>
+            <span class="tag-chip" onclick="toggleTag(this)">sport</span>
+            <span class="tag-chip" onclick="toggleTag(this)">cultură</span>
+            <span class="tag-chip" onclick="toggleTag(this)">educație</span>
+            <span class="tag-chip" onclick="toggleTag(this)">sănătate</span>
+            <span class="tag-chip" onclick="toggleTag(this)">2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button class="btn-publish" id="btn-publish" onclick="publicaStirea()">
+        &#128640; Publică Știrea pe Site
+      </button>
+      <div class="progress-bar" id="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-text" id="progress-text"></div>
+      <div class="error-box" id="error-box"></div>
+    </div>
+
+    <div class="success-box" id="success-box">
+      <div class="icon">&#9989;</div>
+      <h2>Știrea a fost publicată!</h2>
+      <p id="success-msg">Articolul va apărea pe site în aproximativ 1 minut.</p>
+      <p id="success-link" style="margin-top:10px;"></p>
+      <button class="btn-new" onclick="newStire()">+ Publică altă știre</button>
+    </div>
+
+  </div>
+  <!-- =================== END TAB PUBLICA =================== -->
+
+  <!-- =================== TAB GESTIONARE =================== -->
+  <div id="tab-gestionare" style="display:none;">
+    <div class="form-card">
+      <div class="form-card-title">&#128203; Articole Publicate</div>
+      <div class="form-card-body">
+        <button class="btn-refresh" onclick="incarcaArticole()">&#8635; Reîncarcă lista</button>
+        <div id="articles-list-wrap">
+          <div class="articles-loading">Se încarcă lista articolelor...</div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="form-card">
-    <div class="form-card-title">&#127991; Taguri SEO</div>
-    <div class="form-card-body">
-      <div class="field">
-        <label>Taguri (click pentru selectare rapidă)</label>
-        <input type="text" id="taguri-input" placeholder="Adaugă tag personalizat și apasă Enter" onkeydown="addCustomTag(event)" />
-        <div class="taguri-row" id="taguri-chips">
-          <span class="tag-chip" onclick="toggleTag(this)">mehedinți</span>
-          <span class="tag-chip" onclick="toggleTag(this)">drobeta turnu severin</span>
-          <span class="tag-chip" onclick="toggleTag(this)">actualitate</span>
-          <span class="tag-chip" onclick="toggleTag(this)">politie</span>
-          <span class="tag-chip" onclick="toggleTag(this)">accident</span>
-          <span class="tag-chip" onclick="toggleTag(this)">primărie</span>
-          <span class="tag-chip" onclick="toggleTag(this)">sport</span>
-          <span class="tag-chip" onclick="toggleTag(this)">cultură</span>
-          <span class="tag-chip" onclick="toggleTag(this)">educație</span>
-          <span class="tag-chip" onclick="toggleTag(this)">sănătate</span>
-          <span class="tag-chip" onclick="toggleTag(this)">2026</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="submit-area">
-    <button class="btn-publish" id="btn-publish" onclick="publicaStirea()">
-      &#128640; Publică Știrea pe Site
-    </button>
-    <div class="progress-bar" id="progress-bar">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-    <div class="progress-text" id="progress-text"></div>
-    <div class="error-box" id="error-box"></div>
-  </div>
-
-  <div class="success-box" id="success-box">
-    <div class="icon">&#9989;</div>
-    <h2>Știrea a fost publicată!</h2>
-    <p id="success-msg">Articolul va apărea pe site în aproximativ 1 minut.</p>
-    <p id="success-link" style="margin-top:10px;"></p>
-    <button class="btn-new" onclick="newStire()">+ Publică altă știre</button>
-  </div>
+  <!-- =================== END TAB GESTIONARE =================== -->
 
 </div>
 
@@ -376,6 +457,8 @@ Poți folosi:
 const OWNER = 'tanasiecristinel1975-wq';
 const REPO  = 'mehedintiazi';
 const BRANCH = 'main';
+
+var _editMode = null; // { slug, existingImg, existingImgFull }
 
 // ===== AUTH =====
 function getToken() { return localStorage.getItem('ma_pat') || ''; }
@@ -419,12 +502,20 @@ function showForm(user) {
   document.getElementById('top-bar').style.display = 'flex';
   document.getElementById('main-form').style.display = 'block';
   document.getElementById('user-info').textContent = 'Conectat ca: ' + user;
-  // Seteaza data de azi
   var azi = new Date();
   var yyyy = azi.getFullYear();
   var mm = String(azi.getMonth()+1).padStart(2,'0');
   var dd = String(azi.getDate()).padStart(2,'0');
   document.getElementById('data').value = yyyy + '-' + mm + '-' + dd;
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.getElementById('tab-btn-publica').classList.toggle('active', tab === 'publica');
+  document.getElementById('tab-btn-gestionare').classList.toggle('active', tab === 'gestionare');
+  document.getElementById('tab-publica').style.display = tab === 'publica' ? 'block' : 'none';
+  document.getElementById('tab-gestionare').style.display = tab === 'gestionare' ? 'block' : 'none';
+  if (tab === 'gestionare') incarcaArticole();
 }
 
 // ===== SLUG =====
@@ -459,14 +550,14 @@ function handlePoza(input) {
     var ext = file.name.split('.').pop().toLowerCase();
     var slug = titluLaSlug(document.getElementById('titlu').value || 'poza');
     pozaNumeFinal = slug + '-' + getYear() + '.' + ext;
-    document.getElementById('poza-name').textContent = 'Fisier: ' + pozaNumeFinal;
+    document.getElementById('poza-name').textContent = 'Fisier nou: ' + pozaNumeFinal;
     document.getElementById('poza-preview').style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
 
 // ===== GALERIE FOTO =====
-var galeriePoze = []; // [{base64, name, preview}]
+var galeriePoze = [];
 
 function handleGalerie(input) {
   var files = Array.from(input.files).slice(0, 10);
@@ -496,14 +587,14 @@ function renderGalerieGrid() {
     var div = document.createElement('div');
     div.className = 'galerie-item';
     div.innerHTML = '<img src="' + poza.preview + '" alt=""/>' +
-      '<button class="del" onclick="stergeGalerie(' + i + ')">×</button>' +
+      '<button class="del" onclick="stergeGalerieItem(' + i + ')">×</button>' +
       '<div class="nr">Foto ' + (i+1) + '</div>';
     grid.appendChild(div);
   });
   count.textContent = galeriePoze.length > 0 ? galeriePoze.length + ' poze selectate' : '';
 }
 
-function stergeGalerie(i) {
+function stergeGalerieItem(i) {
   galeriePoze.splice(i, 1);
   renderGalerieGrid();
 }
@@ -518,7 +609,7 @@ gDrop.addEventListener('drop', function(e) {
   handleGalerie(fakeInput);
 });
 
-// Drag and drop
+// Drag and drop poza principala
 var drop = document.getElementById('poza-drop');
 drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('over'); });
 drop.addEventListener('dragleave', function() { drop.classList.remove('over'); });
@@ -557,16 +648,26 @@ function setProgress(pct, text) {
   document.getElementById('progress-text').textContent = text;
 }
 
+// ===== BASE64 =====
+function toBase64(str) {
+  var bytes = new TextEncoder().encode(str);
+  var binStr = Array.from(bytes, function(b){ return String.fromCodePoint(b); }).join('');
+  return btoa(binStr);
+}
+function fromBase64(b64) {
+  var raw = atob(b64.replace(/\n/g, ''));
+  var bytes = new Uint8Array(raw.length);
+  for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
 // ===== GITHUB API =====
 async function githubPut(path, content, message, sha) {
   var body = { message: message, content: content, branch: BRANCH };
   if (sha) body.sha = sha;
   var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
     method: 'PUT',
-    headers: {
-      'Authorization': 'token ' + getToken(),
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Authorization': 'token ' + getToken(), 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
   var data = await r.json();
@@ -581,6 +682,269 @@ async function githubGetSha(path) {
   if (r.status === 404) return null;
   var d = await r.json();
   return d.sha || null;
+}
+
+async function githubDelete(path, sha, message) {
+  var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'token ' + getToken(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: message, sha: sha, branch: BRANCH })
+  });
+  if (!r.ok) {
+    var d = await r.json();
+    throw new Error(d.message || 'Eroare stergere fisier');
+  }
+}
+
+async function githubBlobCommit(filePath, content, message) {
+  var token = getToken();
+  var base = 'https://api.github.com/repos/' + OWNER + '/' + REPO;
+  var h = { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' };
+
+  var refData = await (await fetch(base + '/git/refs/heads/' + BRANCH, { headers: h })).json();
+  var commitSha = refData.object.sha;
+  var commitData = await (await fetch(base + '/git/commits/' + commitSha, { headers: h })).json();
+  var treeSha = commitData.tree.sha;
+
+  var blobData = await (await fetch(base + '/git/blobs', {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ content: content, encoding: 'utf-8' })
+  })).json();
+
+  var newTreeData = await (await fetch(base + '/git/trees', {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ base_tree: treeSha, tree: [{ path: filePath, mode: '100644', type: 'blob', sha: blobData.sha }] })
+  })).json();
+
+  var newCommitData = await (await fetch(base + '/git/commits', {
+    method: 'POST', headers: h,
+    body: JSON.stringify({ message: message, tree: newTreeData.sha, parents: [commitSha] })
+  })).json();
+
+  await fetch(base + '/git/refs/heads/' + BRANCH, {
+    method: 'PATCH', headers: h,
+    body: JSON.stringify({ sha: newCommitData.sha, force: false })
+  });
+}
+
+// ===== LISTA ARTICOLE =====
+async function incarcaArticole() {
+  var wrap = document.getElementById('articles-list-wrap');
+  wrap.innerHTML = '<div class="articles-loading">&#9203; Se încarcă lista articolelor...</div>';
+  try {
+    var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/index.html?ref=' + BRANCH, {
+      headers: { 'Authorization': 'token ' + getToken() }
+    });
+    var d = await r.json();
+    var content = fromBase64(d.content);
+
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(content, 'text/html');
+    var cards = doc.querySelectorAll('.article-card');
+
+    if (cards.length === 0) {
+      wrap.innerHTML = '<div class="articles-loading">Nu există articole publicate.</div>';
+      return;
+    }
+
+    var html = '<div class="articles-mgmt">';
+    cards.forEach(function(card) {
+      var link = card.querySelector('.card-title a');
+      var img = card.querySelector('.card-img img');
+      var date = card.querySelector('.card-meta span');
+      var cat = card.querySelector('.card-category');
+      if (!link) return;
+
+      var href = link.getAttribute('href');
+      var slug = href.replace('.html', '');
+      var titlu = link.textContent.trim();
+      var imgSrc = img ? img.getAttribute('src') : '';
+      var dateText = date ? date.textContent.replace('🕐','').replace('📅','').trim() : '';
+      var catText = cat ? cat.textContent.trim() : '';
+      var imgUrl = imgSrc ? 'https://www.mehedintiazi.ro/' + imgSrc : '';
+
+      var slugSafe = slug.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      var titluSafe = titlu.replace(/\\/g,'\\\\').replace(/'/g,"\\'").slice(0,60);
+
+      html += '<div class="article-row">' +
+        '<div class="article-row-img">' + (imgUrl ? '<img src="' + imgUrl + '" onerror="this.style.display=\'none\'">' : '') + '</div>' +
+        '<div class="article-row-info">' +
+          '<div class="article-row-title">' + titlu + '</div>' +
+          '<div class="article-row-meta">' + catText + ' &middot; ' + dateText + '</div>' +
+        '</div>' +
+        '<div class="article-row-actions">' +
+          '<button class="btn-edit" onclick="editeazaArticol(\'' + slugSafe + '\')">&#9998; Editează</button>' +
+          '<button class="btn-delete" onclick="stergeArticol(\'' + slugSafe + '\',\'' + titluSafe + '\')">&#128465; Șterge</button>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+  } catch(e) {
+    wrap.innerHTML = '<div class="articles-loading" style="color:#c0392b;">Eroare: ' + e.message + '</div>';
+  }
+}
+
+// ===== STERGE ARTICOL =====
+async function stergeArticol(slug, titlu) {
+  if (!confirm('Sigur vrei să ștergi articolul:\n"' + titlu + '..."\n\nAceastă acțiune NU poate fi anulată!')) return;
+
+  var wrap = document.getElementById('articles-list-wrap');
+  wrap.innerHTML = '<div class="articles-loading">&#9203; Se șterge articolul... Te rugăm să aștepți.</div>';
+
+  try {
+    // 1. Sterge fisierul HTML al articolului
+    var sha = await githubGetSha(slug + '.html');
+    if (sha) {
+      await githubDelete(slug + '.html', sha, 'Sterge articol: ' + slug);
+    }
+
+    // 2. Scoate cardul din index.html
+    var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/index.html?ref=' + BRANCH, {
+      headers: { 'Authorization': 'token ' + getToken() }
+    });
+    var d = await r.json();
+    var indexContent = fromBase64(d.content);
+
+    // Gaseste cardul dupa slug
+    var slugUpper = slug.toUpperCase().slice(0, 50);
+    var cardStart = indexContent.indexOf('<!-- ARTICOL - ' + slugUpper);
+    if (cardStart === -1) {
+      // Fallback: cauta dupa href
+      var hrefIdx = indexContent.indexOf('"' + slug + '.html"');
+      if (hrefIdx !== -1) {
+        cardStart = indexContent.lastIndexOf('<!-- ARTICOL', hrefIdx);
+        if (cardStart === -1) cardStart = indexContent.lastIndexOf('<div class="article-card"', hrefIdx);
+      }
+    }
+
+    if (cardStart !== -1) {
+      // Gaseste inceputul div-ului article-card
+      var divStart = indexContent.indexOf('<div class="article-card"', cardStart);
+      if (divStart !== -1) {
+        // Numara div-uri deschise/inchise pentru a gasi finalul cardului
+        var depth = 0;
+        var cardEnd = divStart;
+        for (var j = divStart; j < indexContent.length - 5; j++) {
+          if (indexContent.substr(j, 4) === '<div') depth++;
+          if (indexContent.substr(j, 6) === '</div>') {
+            depth--;
+            if (depth === 0) { cardEnd = j + 6; break; }
+          }
+        }
+        // Sterge de la inceputul comentariului pana la finalul div-ului (inclusiv newline)
+        while (cardEnd < indexContent.length && indexContent[cardEnd] === '\n') cardEnd++;
+        indexContent = indexContent.slice(0, cardStart) + indexContent.slice(cardEnd);
+      }
+    }
+
+    // Update index.html via blob API (sigur pentru fisiere mari)
+    await githubBlobCommit('index.html', indexContent, 'Sterge card homepage: ' + slug);
+
+    alert('✅ Articolul "' + titlu + '..." a fost șters cu succes!\n\nSite-ul se va actualiza în 1-2 minute.');
+    incarcaArticole();
+  } catch(e) {
+    alert('❌ Eroare la ștergere: ' + e.message);
+    incarcaArticole();
+  }
+}
+
+// ===== EDITEAZA ARTICOL =====
+async function editeazaArticol(slug) {
+  var wrap = document.getElementById('articles-list-wrap');
+  wrap.innerHTML = '<div class="articles-loading">&#9203; Se încarcă articolul pentru editare...</div>';
+
+  try {
+    var r = await fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + slug + '.html?ref=' + BRANCH, {
+      headers: { 'Authorization': 'token ' + getToken() }
+    });
+    var d = await r.json();
+    var content = fromBase64(d.content);
+
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(content, 'text/html');
+
+    // Extrage date
+    var titluEl = doc.querySelector('h1.article-title');
+    var catEl = doc.querySelector('.article-category');
+    var imgEl = doc.querySelector('.article-img-main img');
+    var contentEl = doc.querySelector('.article-content');
+    var metaDate = doc.querySelector('.article-meta span');
+
+    var titlu = titluEl ? titluEl.textContent.trim() : '';
+    var catRaw = catEl ? catEl.textContent.trim() : '';
+
+    // Mapeaza categoria (elimina emoji)
+    var catOptions = ['Actualitate','Ordine Publică','Social','Economic','Sport','Cultură','Educație','Meteo'];
+    var catValue = 'Actualitate';
+    catOptions.forEach(function(c) {
+      if (catRaw.indexOf(c) !== -1) catValue = c;
+    });
+
+    // Extrage textul articolului
+    var textContent = '';
+    if (contentEl) {
+      // Sterge elementele de UI din clone
+      var clone = contentEl.cloneNode(true);
+      clone.querySelectorAll('.article-tags, .share-bottom, .article-img-inline').forEach(function(el){ el.remove(); });
+      // Converteste HTML la text simplu
+      clone.childNodes.forEach(function(node) {
+        if (node.nodeType !== 1) return;
+        var tag = node.tagName.toLowerCase();
+        var txt = node.textContent.trim();
+        if (!txt) return;
+        if (tag === 'p') textContent += txt + '\n\n';
+        else if (tag === 'h2') textContent += '## ' + txt + '\n\n';
+        else if (tag === 'li') textContent += '- ' + txt + '\n';
+        else if (tag === 'ul' || tag === 'ol') {
+          node.querySelectorAll('li').forEach(function(li){ textContent += '- ' + li.textContent.trim() + '\n'; });
+          textContent += '\n';
+        }
+      });
+    }
+
+    var imgSrc = imgEl ? imgEl.getAttribute('src') : '';
+    var imgFullUrl = imgSrc ? 'https://www.mehedintiazi.ro/' + imgSrc : '';
+    var imgNumeExistent = imgSrc ? imgSrc.replace('img/', '') : '';
+
+    // Seteaza modul editare
+    _editMode = { slug: slug, existingImg: imgNumeExistent, existingImgFull: imgFullUrl };
+
+    // Pre-completeaza formularul
+    document.getElementById('titlu').value = titlu;
+    document.getElementById('categorie').value = catValue;
+    document.getElementById('text-articol').value = textContent.trim();
+    updateSlug();
+
+    // Afiseaza poza existenta
+    if (imgFullUrl) {
+      document.getElementById('poza-img').src = imgFullUrl;
+      document.getElementById('poza-name').textContent = 'Poza curentă: ' + imgNumeExistent + ' — încarcă o alta pentru a o schimba';
+      document.getElementById('poza-preview').style.display = 'block';
+    }
+
+    // Reseteaza poza noua (pastram _editMode pentru a sti ca e editare)
+    pozaBase64 = '';
+    pozaNumeFinal = imgNumeExistent;
+
+    // Afiseaza notita editare
+    document.getElementById('edit-notice-text').textContent = 'Editezi articolul: "' + titlu.slice(0, 60) + '"';
+    document.getElementById('edit-notice').style.display = 'block';
+
+    // Trece la tab-ul de publicare
+    switchTab('publica');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch(e) {
+    alert('❌ Eroare la încărcarea articolului: ' + e.message);
+    incarcaArticole();
+  }
+}
+
+function cancelEdit() {
+  _editMode = null;
+  document.getElementById('edit-notice').style.display = 'none';
+  newStire();
 }
 
 // ===== CONSTANTE TEMPLATE =====
@@ -739,13 +1103,7 @@ function buildCardHtml(titlu, dataRo, categorie, pozaNume, slug, excerpt) {
     '            </div>\n          </div>\n';
 }
 
-function toBase64(str) {
-  var bytes = new TextEncoder().encode(str);
-  var binStr = Array.from(bytes, function(b){ return String.fromCodePoint(b); }).join('');
-  return btoa(binStr);
-}
-
-// ===== PUBLICA =====
+// ===== PUBLICA / EDITEAZA =====
 async function publicaStirea() {
   var errBox = document.getElementById('error-box');
   errBox.style.display = 'none';
@@ -757,11 +1115,16 @@ async function publicaStirea() {
   var text  = document.getElementById('text-articol').value.trim();
   var taguri = getTaguri();
 
-  // Validari
   if (!titlu) { showError('Completează titlul știrii!'); return; }
   if (!data)  { showError('Completează data publicării!'); return; }
-  if (!pozaBase64) { showError('Adaugă o fotografie principală!'); return; }
   if (text.length < 80) { showError('Textul știrii este prea scurt (minim 80 caractere)!'); return; }
+
+  // In edit mode fara poza noua → pastreaza poza existenta
+  if (!pozaBase64 && _editMode) {
+    pozaNumeFinal = _editMode.existingImg;
+  } else if (!pozaBase64) {
+    showError('Adaugă o fotografie principală!'); return;
+  }
 
   var slug = titluLaSlug(titlu) + '-' + getYear();
 
@@ -769,11 +1132,13 @@ async function publicaStirea() {
   document.getElementById('success-box').style.display = 'none';
 
   try {
-    // 1. Upload poza principala
-    setProgress(10, 'Se incarca fotografia principala...');
-    var pozaPath = 'img/' + pozaNumeFinal;
-    var existingSha = await githubGetSha(pozaPath);
-    await githubPut(pozaPath, pozaBase64, 'Poza: ' + pozaNumeFinal, existingSha);
+    // 1. Upload poza principala (doar daca e noua)
+    if (pozaBase64) {
+      setProgress(10, 'Se incarca fotografia principala...');
+      var pozaPath = 'img/' + pozaNumeFinal;
+      var existingSha = await githubGetSha(pozaPath);
+      await githubPut(pozaPath, pozaBase64, 'Poza: ' + pozaNumeFinal, existingSha);
+    }
 
     // 2. Upload poze galerie
     var galerieNumeList = [];
@@ -781,18 +1146,17 @@ async function publicaStirea() {
       var gp = galeriePoze[gi];
       var gName = slug + '-foto-' + (gi+2) + '-' + getYear() + '.' + gp.ext;
       galerieNumeList.push(gName);
-      setProgress(Math.round(10 + (gi+1) / (galeriePoze.length+1) * 50),
-        'Se incarca poza ' + (gi+1) + ' din ' + galeriePoze.length + '...');
+      setProgress(Math.round(10 + (gi+1) / (galeriePoze.length+1) * 50), 'Se incarca poza ' + (gi+1) + ' din ' + galeriePoze.length + '...');
       var gSha = await githubGetSha('img/' + gName);
       await githubPut('img/' + gName, gp.base64, 'Poza galerie: ' + gName, gSha);
     }
 
-    // 3. Genereaza si uploadeaza HTML-ul articolului direct
+    // 3. Genereaza si uploadeaza HTML articol
     setProgress(70, 'Se genereaza articolul HTML...');
     var articolHtml = buildArticolHTML(titlu, data, ora, cat, pozaNumeFinal, taguri, text, galerieNumeList, slug);
     var htmlPath = slug + '.html';
     var htmlSha = await githubGetSha(htmlPath);
-    await githubPut(htmlPath, toBase64(articolHtml), 'Stire: ' + titlu.slice(0,60), htmlSha);
+    await githubPut(htmlPath, toBase64(articolHtml), (_editMode ? 'Editare stire: ' : 'Stire: ') + titlu.slice(0,60), htmlSha);
 
     // 4. Actualizeaza index.html cu cardul articolului
     setProgress(85, 'Se actualizeaza pagina principala...');
@@ -801,35 +1165,57 @@ async function publicaStirea() {
     });
     var indexData = await indexR.json();
     var indexSha = indexData.sha;
-    var indexContent = decodeURIComponent(escape(atob(indexData.content.replace(/\n/g,''))));
+    var indexContent = fromBase64(indexData.content);
 
     var marker = '<div class="articles-grid mb-20">';
-    if (indexContent.includes(slug + '.html')) {
-      // cardul exista deja, nu duplica
-    } else if (indexContent.includes(marker)) {
-      var dataRo = formatDataRo(data);
-      var textHtmlPreview = textToHtml(text);
-      var primaP = textHtmlPreview.match(/<p>([\s\S]*?)<\/p>/);
-      var excerpt = primaP ? primaP[1].replace(/<[^>]*>/g,'').slice(0,150) : titlu.slice(0,150);
-      var card = buildCardHtml(titlu, dataRo, cat, pozaNumeFinal, slug, excerpt);
-      var insertPos = indexContent.indexOf(marker) + marker.length;
-      indexContent = indexContent.slice(0, insertPos) + card + indexContent.slice(insertPos);
-      await githubPut('index.html', toBase64(indexContent), 'Card homepage: ' + titlu.slice(0,50), indexSha);
+    if (!indexContent.includes(slug + '.html')) {
+      // Articol nou - adauga cardul
+      if (indexContent.includes(marker)) {
+        var dataRo = formatDataRo(data);
+        var textHtmlPreview = textToHtml(text);
+        var primaP = textHtmlPreview.match(/<p>([\s\S]*?)<\/p>/);
+        var excerpt = primaP ? primaP[1].replace(/<[^>]*>/g,'').slice(0,150) : titlu.slice(0,150);
+        var card = buildCardHtml(titlu, dataRo, cat, pozaNumeFinal, slug, excerpt);
+        var insertPos = indexContent.indexOf(marker) + marker.length;
+        indexContent = indexContent.slice(0, insertPos) + card + indexContent.slice(insertPos);
+        await githubBlobCommit('index.html', indexContent, 'Card homepage: ' + titlu.slice(0,50));
+      }
+    } else if (_editMode) {
+      // Editare - actualizeaza cardul existent (imaginea si titlul)
+      var slugUpper = slug.toUpperCase().slice(0, 50);
+      var cardStartIdx = indexContent.indexOf('<!-- ARTICOL - ' + slugUpper);
+      if (cardStartIdx !== -1) {
+        var divStartIdx = indexContent.indexOf('<div class="article-card"', cardStartIdx);
+        if (divStartIdx !== -1) {
+          var depth = 0; var cardEndIdx = divStartIdx;
+          for (var j = divStartIdx; j < indexContent.length - 5; j++) {
+            if (indexContent.substr(j,4) === '<div') depth++;
+            if (indexContent.substr(j,6) === '</div>') { depth--; if (depth === 0) { cardEndIdx = j + 6; break; } }
+          }
+          while (cardEndIdx < indexContent.length && indexContent[cardEndIdx] === '\n') cardEndIdx++;
+          var dataRo2 = formatDataRo(data);
+          var textHtmlPreview2 = textToHtml(text);
+          var primaP2 = textHtmlPreview2.match(/<p>([\s\S]*?)<\/p>/);
+          var excerpt2 = primaP2 ? primaP2[1].replace(/<[^>]*>/g,'').slice(0,150) : titlu.slice(0,150);
+          var newCard = buildCardHtml(titlu, dataRo2, cat, pozaNumeFinal, slug, excerpt2);
+          indexContent = indexContent.slice(0, cardStartIdx) + newCard + indexContent.slice(cardEndIdx);
+          await githubBlobCommit('index.html', indexContent, 'Actualizeaza card: ' + titlu.slice(0,50));
+        }
+      }
     }
 
-    // 5. Gata!
-    setProgress(100, 'Publicat cu succes!');
+    setProgress(100, _editMode ? 'Articol actualizat cu succes!' : 'Publicat cu succes!');
 
     setTimeout(function() {
       document.getElementById('progress-bar').style.display = 'none';
       document.getElementById('progress-text').textContent = '';
       document.getElementById('btn-publish').disabled = false;
+      document.getElementById('edit-notice').style.display = 'none';
+      _editMode = null;
 
       var url = 'https://www.mehedintiazi.ro/' + slug;
-      document.getElementById('success-msg').textContent =
-        'Articolul va apărea live în aproximativ 2 minute (Cloudflare il deployeaza).';
-      document.getElementById('success-link').innerHTML =
-        'Link articol: <a href="' + url + '" target="_blank">' + url + '</a>';
+      document.getElementById('success-msg').textContent = 'Articolul va fi actualizat pe site în aproximativ 2 minute (Cloudflare il deployeaza).';
+      document.getElementById('success-link').innerHTML = 'Link articol: <a href="' + url + '" target="_blank">' + url + '</a>';
       document.getElementById('success-box').style.display = 'block';
       document.getElementById('success-box').scrollIntoView({ behavior: 'smooth' });
     }, 1200);
@@ -858,8 +1244,10 @@ function newStire() {
   document.getElementById('success-box').style.display = 'none';
   document.getElementById('galerie-grid').innerHTML = '';
   document.getElementById('galerie-count').textContent = '';
+  document.getElementById('edit-notice').style.display = 'none';
   galeriePoze = [];
   pozaFile = null; pozaBase64 = ''; pozaNumeFinal = '';
+  _editMode = null;
   updateSlug();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
