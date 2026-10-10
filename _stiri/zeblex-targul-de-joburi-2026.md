@@ -1,5 +1,5 @@
 ---
-title: "ZEBLEX, alături de viitorii profesioniști la Târgul de Joburi 2026: compania investește în oameni și în dezvoltarea echipei"
+title: "ZEBLEX, alături de viitorii profesioniști la Târgul de Joburi 2026 din Drobeta-Turnu Severin: compania investește în oameni și în dezvoltarea echipei"
 date: "2026-10-10T12:00:00"
 categorie: "Economie"
 poza: "/img/zeblex-targul-de-joburi-2026.jpg"
@@ -14,10 +14,11 @@ taguri:
   - zidar
   - dulgher
   - firme din Mehedinți
+  - Drobeta-Turnu Severin
 
 ---
 
-**MEHEDINȚI** – Compania de construcții **ZEBLEX** își mărește echipa și caută noi talente. Pe **9 octombrie 2026**, firma a participat la **Târgul de Joburi 2026**, unde reprezentanții ei au stat de vorbă cu persoanele interesate să lucreze în cadrul companiei.
+**DROBETA-TURNU SEVERIN** – Compania de construcții **ZEBLEX** își mărește echipa și caută noi talente. Pe **9 octombrie 2026**, firma a participat la **Târgul de Joburi 2026** din **Drobeta-Turnu Severin**, unde reprezentanții ei au stat de vorbă cu persoanele interesate să lucreze în cadrul companiei.
 
 Standul ZEBLEX a fost vizitat de candidați de diferite vârste și cu experiențe profesionale diferite. Mulți au venit cu CV-ul pregătit și au plecat cu informații despre posturile disponibile și despre proiectele firmei.
 
