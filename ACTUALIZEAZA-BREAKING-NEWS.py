@@ -82,10 +82,44 @@ def extrage_titlu(filepath):
 # ============================================================
 #  SCANEAZA articolele - prioritate AZI, apoi completare cu recente
 # ============================================================
+def date_publicare_git():
+    """Data la care fiecare pagina .html a fost adaugata in git (= data publicarii).
+    Data fisierului de pe disc nu e buna: se schimba cand regeneram paginile vechi."""
+    try:
+        out = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--name-only", "--format=@%ct", "-n", "300", "--", "*.html"],
+            cwd=SITE_PATH, capture_output=True, text=True, encoding="utf-8", check=True,
+        ).stdout
+    except Exception:
+        return None
+    date = {}
+    ts = None
+    for linie in out.splitlines():
+        linie = linie.strip()
+        if linie.startswith("@"):
+            ts = int(linie[1:])
+        elif linie and "/" not in linie and linie not in date:
+            date[linie] = ts
+    return date
+
+
+def e_pagina_reclama(cale):
+    """Paginile promo pentru firme au noindex si nu trebuie sa apara in ticker."""
+    try:
+        with open(cale, "r", encoding="utf-8") as f:
+            return "noindex" in f.read(4000).lower()
+    except Exception:
+        return False
+
+
 def scaneza_articole():
     acum = datetime.now()
     azi_inceput = acum.replace(hour=0, minute=0, second=0, microsecond=0)
     limita_recente = acum - timedelta(hours=ORE_RECENTE * 7)  # ultima saptamana fallback
+    date_git = date_publicare_git()
+    if date_git is not None:
+        # Cu datele din git luam pur si simplu cele mai noi NR_STIRI, oricat de vechi
+        limita_recente = datetime.min
 
     articole_azi    = []
     articole_recente = []
@@ -98,8 +132,16 @@ def scaneza_articole():
         cale = os.path.join(SITE_PATH, fisier)
         if not os.path.isfile(cale):
             continue
+        if e_pagina_reclama(cale):
+            continue
 
-        mtime = os.path.getmtime(cale)
+        if date_git is not None:
+            # Paginile vechi (in afara ultimelor 300 de commit-uri) nu au data -> sarim
+            mtime = date_git.get(fisier)
+            if mtime is None:
+                continue
+        else:
+            mtime = os.path.getmtime(cale)
         data_fisier = datetime.fromtimestamp(mtime)
         titlu = extrage_titlu(cale)
         if not titlu:
@@ -174,10 +216,15 @@ def git_push():
         os.chdir(SITE_PATH)
         data_ora = datetime.now().strftime("%d.%m.%Y %H:%M")
         subprocess.run(["git", "add", "index.html"], check=True)
+        # Daca ticker-ul e deja la zi, nu avem ce trimite
+        if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode == 0:
+            print("[OK] Ticker-ul era deja la zi, nimic de trimis.")
+            return True
         subprocess.run(["git", "commit", "-m", f"Auto Breaking News {data_ora}"], check=True)
-        subprocess.run(["git", "push", "origin", "master"], check=True)
-        subprocess.run(["git", "push", "origin", "master:main"], check=True)
-        print("[OK] Push reusit pe master si main!")
+        # Aduce intai stirile publicate de pe alt calculator, altfel push-ul e respins
+        subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], check=True)
+        subprocess.run(["git", "push", "origin", "main"], check=True)
+        print("[OK] Push reusit pe main!")
         return True
     except subprocess.CalledProcessError as e:
         print(f"[!!] Eroare git: {e}")
